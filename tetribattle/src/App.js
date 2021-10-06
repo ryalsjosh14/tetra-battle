@@ -1,4 +1,5 @@
 import { w3cwebsocket } from 'websocket';
+import Home from './screens/Home'
 import './App.css';
 
 //currently fails if server is offline before client connects, but that should not matter since clients will be connecting to server intermittently ->
@@ -16,9 +17,7 @@ function send() {
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <button onClick={send}>Send message</button>
-      </header>
+      <Home></Home>
     </div>
   );
 }
