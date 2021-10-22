@@ -1,23 +1,60 @@
-import { w3cwebsocket } from 'websocket';
-import Home from './screens/Home'
+import { useState } from 'react';
+import { Route, Switch, Redirect  } from 'react-router-dom';
+import AppBar from './NavBar';
+import Home from './screens/Home';
+import Room from './screens/Room';
+import Login from './screens/Login';
+import Signup from './screens/Signup';
+import Settings from './screens/Settings';
 import './App.css';
 
-//currently fails if server is offline before client connects, but that should not matter since clients will be connecting to server intermittently ->
-//and not the other way around: server always running, clients not.
-
-const client = new w3cwebsocket('ws://localhost:8000'); //all of this does not belong here, but is staying here for now 
-const UID = Math.floor(Math.random() * 100); 
-
-client.onopen = () => console.log("Connected to WebSocket");
-client.onmessage = (msg) => console.log(msg.data);
-function send() {
-  client.readyState === 1 ? client.send(JSON.stringify({user: UID, data: 'Test client message'})) : console.log("Server not running");
-}
 
 function App() {
+  const [currentUser, getUser] = useState(null);
+/*   const getUser = () => {
+
+  } */
+
+  function genId() {
+    let res = "";
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    for (let i = 0; i < 10; i++) //create 10 character room ID
+      res += chars.at(Math.floor(Math.random() * chars.length));
+    
+    return res;
+  }
+
   return (
     <div className="App">
-      <Home></Home>
+      <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
+
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/home"/>
+        </Route>
+
+        <Route path="/home" render={() => {
+          return <Home />
+        }}/>
+        
+        <Route path="/room" render={(props) => {
+          /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
+          return <Room {...props} id={genId()}/>
+        }}/>
+
+        <Route path="/login" render={(props) => {
+          return <Login {...props}/>
+        }}/>
+
+        <Route path="/signup" render={(props) => {
+          return <Signup {...props}/>
+        }}/>
+
+        <Route path="/settings" render={(props) => {
+          return <Settings {...props}/>
+        }}/>
+      </Switch>
     </div>
   );
 }

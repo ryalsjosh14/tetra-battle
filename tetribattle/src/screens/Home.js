@@ -1,5 +1,5 @@
-import { Grid } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography';
+import { Grid, Button } from '@material-ui/core'
+//import Typography from '@material-ui/core/Typography';
 
 export default function Home(){
 
@@ -36,8 +36,12 @@ export default function Home(){
                 </Grid>
                 <Grid item xs={false} sm={3}/>
 
+                <Grid item xs={12} sm={6} style={{align: "center"}}>
+                    <Button href="/room">
+                        Create a room!
+                    </Button>
+                </Grid>
             </Grid>
         </Grid>
     )
-
 }
