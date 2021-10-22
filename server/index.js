@@ -1,24 +1,30 @@
-const mongoose = require('mongoose');
-require ('dotenv/config')
+//require ('dotenv/config')
 const path = require('path'), //dependencies
     express = require('express'),
     morgan = require('morgan'),
-    express_ws = require('express-ws');
+    mongoose = require('mongoose'),
+    bodyParser = require('body-parser');
 
+const postsRoute = require('./routes/posts')
+const userRouter = require('./routes/userRouter')
+const settingsRouter = require('./routes/settingsRouter')
   
 const port = 8000;
 const app = express();
 app.use(morgan('dev')); //wrapping express
+app.use(bodyParser.json());
 
+//Connect to mongo
+mongoose.connect(require('./config/config.js').uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(connect => console.log("Connected to MongoDB"))
+.catch(e => console.log("Could not connect to MongoDB", e));
 
-const postsRoute = require('./routes/posts')
-
+//Use routers
 app.use('/posts', postsRoute)
+app.use('/users', userRouter)
+app.use('/settings', settingsRouter)
 
-
-mongoose.connect(process.env.MONGO_URI, () => {
-  console.log("connected to db")
-})
-
-
+//Listen
 app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));
