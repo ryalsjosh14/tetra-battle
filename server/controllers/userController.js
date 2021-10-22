@@ -1,6 +1,7 @@
 const User = require('../schemas/userModel.js'),
     jwt = require('jsonwebtoken'),
     jwt_secret = require('../config/config.js').secret;
+    uuid = require('uuid');
 
 // function to create tokens
 function signToken(user) {
@@ -18,7 +19,7 @@ module.exports = {
             const users = await User.find({});
             res.json(users);
         } catch(err) {
-            alert(err);
+            console.err(err);
         }
     },
 
@@ -26,20 +27,20 @@ module.exports = {
     show: async (req, res) => {
         console.log("Current User:");
         console.log(req.user);
-
+        console.log(req.params.uid);
         try {
-            const user = await User.findById(req.params.uid);
+            const user = await User.findOne({uid: req.params.uid});
             res.json(user);
         } catch(err) {
-            alert(err);
+            console.error(err);
         }
     },
 
     // creates new user
-    create: async (req, res) => { //TODO******************** CURRENTLY CRASHES IF DUPLICATE USERNAME USED, EVEN THOUGH UNIQUE NOT SET
+    create: async (req, res) => {
         try{
             const user = new User({
-                UID: req.body.uid,
+                UID: uuid.v4(),
                 username: req.body.username,
                 password: req.body.password
             });
@@ -54,37 +55,18 @@ module.exports = {
     },
 
     // update a user
-    // update: async (req, res) => {
-    //     try {
-    //         const user = await User.findById(req.params.id);
-    //         Object.assign(user, req.body);
-    //         await user.save();
-
-    //         res.json({success: true, message: "User updated", user});
-    //     } catch(err) {
-    //         res.json({success: false, code: err.code});
-    //     }
-    // },
-
-    // update a user
     update: async (req, res) => {
         var newUser = req.body;
         User.updateOne({ _id: req.body._id }, newUser)
         .then((user) => {
             if(!user) {
-                return res.json({
-                    error: 'Error message'
-                });
+                return res.json({error: 'Error message'});
             } else {
-                return res.json({
-                    error: 'Success'
-                });
+                return res.json({error: 'Success'});
             }
         })
         .catch((error) => {
-            return res.json({
-                message: "Error",
-            });
+            return res.json({message: "Error"});
         });
     },
 
@@ -98,8 +80,8 @@ module.exports = {
         }
     },
 
-    authenticate: async (req, res) => {
-        const user = await User.findOne({email: req.body.email});
+    authenticate: async (req, res) => { //on page load, put token in local storage
+        const user = await User.findOne({uid: req.body.uid});
 
         if(!user || !user.validPassword(req.body.password)) {
             return res.json({success: false, message: "Invalid Login"});

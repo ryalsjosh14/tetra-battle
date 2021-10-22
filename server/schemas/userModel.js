@@ -2,12 +2,12 @@ const mongoose = require('mongoose'),
     bcrypt = require('bcrypt-nodejs');
 
 const userSchema = new mongoose.Schema({
-    UID: {type: String, required: true}, //set [unique: true] later once we make a method to pass UID to create function from front end
+    UID: {type: String, required: true, unique: true},
     username: {type: String, required: true, unique: false}, //<--- wat
     password: {type: String, required: true},
 });
 
-/* // adds method to user to create hashed password
+// adds method to user to create hashed password
 userSchema.methods.generateHash = function(password) {
     console.log("running generate hash")
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -19,14 +19,14 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-//before saving to db rehash password if changed
+//before saving to db rehash password if changed (or created)
 userSchema.pre('save', function(next) {
     console.log("running pre save")
     if(this.isModified('password')) {
         this.password = this.generateHash(this.password);
     }
     next();
-}); */
+});
 
 const User = mongoose.model('user', userSchema);
 module.exports = User;
