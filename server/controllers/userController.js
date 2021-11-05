@@ -2,6 +2,8 @@ const User = require('../schemas/userModel.js'),
     jwt = require('jsonwebtoken'),
     jwt_secret = require('../config/config.js').secret;
 
+const uuid = require("uuid")
+
 // function to create tokens
 function signToken(user) {
     const userData = user.toObject();
@@ -39,7 +41,7 @@ module.exports = {
     create: async (req, res) => { //TODO******************** CURRENTLY CRASHES IF DUPLICATE USERNAME USED, EVEN THOUGH UNIQUE NOT SET
         try{
             const user = new User({
-                UID: req.body.uid,
+                UID: uuid.v4(),
                 username: req.body.username,
                 password: req.body.password
             });
