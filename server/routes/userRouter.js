@@ -29,7 +29,9 @@ function verifyToken(req, res, next) {
     })
 }
 
-userRouter.route('/').get(userController.index).post(userController.create);
+userRouter.route('/').get(userController.index);
+
+userRouter.post('/create', userController.create);
 
 userRouter.post('/authenticate', userController.authenticate);
 

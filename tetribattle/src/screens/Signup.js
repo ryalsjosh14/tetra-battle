@@ -15,22 +15,28 @@ const Signup = (props) => {
     }
 
     const onSubmit = () => {
+        console.log(userName)
         const update = {
-            username: {userName},
-            password: {password}
+            username: userName,
+            password: password
         }
 
         const options = {
             method: 'POST',
+            mode: 'cors',
             headers: {
             'Content-Type': 'application/json',
             },
             body: JSON.stringify(update),
         };
 
-        fetch('http://localhost:8000/', options)
-        .then(response => response.json())
-        .then(data => console.log(data));
+        fetch('http://localhost:8000/users/create/', options)
+        .then(response => {
+            alert(response)
+            return response.json()
+        })
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
 
     }
     
@@ -41,7 +47,9 @@ const Signup = (props) => {
                     <form>
                         <input type='text' onChange={changeUsername} value={userName} className="form-control form-group"></input>
                         <input type='text' onChange={changePassword} value={password} className="form-control form-group"></input>
+                        <button onClick={onSubmit}> Create Account</button>
                     </form>
+
                 </div>
             </div>
         </div>

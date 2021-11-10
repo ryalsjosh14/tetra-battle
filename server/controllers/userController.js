@@ -1,9 +1,8 @@
-const User = require('../schemas/userModel.js'),
-    jwt = require('jsonwebtoken'),
-    jwt_secret = require('../config/config.js').secret;
-    uuid = require('uuid');
+const User = require('../schemas/userModel.js')
+const jwt = require('jsonwebtoken')
+const jwt_secret = require('../config/config.js').secret
+const uuid = require('uuid');
 
-const uuid = require("uuid")
 
 // function to create tokens
 function signToken(user) {
@@ -17,6 +16,7 @@ function signToken(user) {
 module.exports = {
     // list all users
     index: async (req, res) => {
+        console.log("in index")
         try {
             const users = await User.find({});
             res.json(users);
@@ -41,6 +41,9 @@ module.exports = {
     // creates new user
     create: async (req, res) => {
         try{
+            console.log(req.body.username)
+            console.log(req.body.password)
+
             const user = new User({
                 UID: uuid.v4(),
                 username: req.body.username,
@@ -49,6 +52,8 @@ module.exports = {
             user.save();
 
             const token = await signToken(user);
+
+            console.log("almost finished create")
 
             res.json({success: true, message: "User created with token", token});
         } catch(err) {
