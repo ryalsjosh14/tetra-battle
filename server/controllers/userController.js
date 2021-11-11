@@ -55,9 +55,9 @@ module.exports = {
 
             console.log("almost finished create")
 
-            res.json({success: true, message: "User created with token", token});
+            return res.json({success: true, message: "User created with token", token});
         } catch(err) {
-            res.json({success: false, code: err.code});
+            return res.json({success: false, code: err.code});
         }
     },
 
@@ -88,13 +88,16 @@ module.exports = {
     },
 
     authenticate: async (req, res) => { //on page load, put token in local storage
-        const user = await User.findOne({uid: req.body.uid});
+        const user = await User.findOne({username: req.body.username});
 
         if(!user || !user.validPassword(req.body.password)) {
+            console.log("about to return failure")
             return res.json({success: false, message: "Invalid Login"});
         }
-
+        console.log("on path to return success")
         const token = await signToken(user);
-        res.json({success: true, message: "Token attached", token});
+        
+        console.log("about to return success")
+        return res.json({success: true, message: "Token attached", token});
     }
 };

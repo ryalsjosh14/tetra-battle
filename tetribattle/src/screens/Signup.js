@@ -31,10 +31,7 @@ const Signup = (props) => {
         };
 
         fetch('http://localhost:8000/users/create/', options)
-        .then(response => {
-            alert(response)
-            return response.json()
-        })
+        .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));
 
