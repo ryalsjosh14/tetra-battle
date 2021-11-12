@@ -6,11 +6,12 @@ import Room from './screens/Room';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Settings from './screens/Settings';
+import UserContext from './UserContext';
 import './App.css';
 
 
 function App() {
-  const [currentUser, getUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 /*   const getUser = () => {
 
   } */
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      <UserContext.Provider value={currentUser, setCurrentUser}>
       <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
 
       <Switch>
@@ -55,6 +57,7 @@ function App() {
           return <Settings {...props}/>
         }}/>
       </Switch>
+      </UserContext.Provider>
     </div>
   );
 }
