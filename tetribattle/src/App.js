@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div className="App">
-      <UserContext.Provider value={currentUser, setCurrentUser}>
+      {/*<UserContext.Provider value={currentUser, setCurrentUser}> */}
       <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
 
       <Switch>
@@ -57,7 +57,7 @@ function App() {
           return <Settings {...props}/>
         }}/>
       </Switch>
-      </UserContext.Provider>
+      {/*</UserContext.Provider> */}
     </div>
   );
 }
