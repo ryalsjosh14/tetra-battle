@@ -5,6 +5,13 @@ const path = require('path'), //dependencies
     morgan = require('morgan'),
     express_ws = require('express-ws');
 
+let uri;
+try {
+  uri = require("./config/config.js").uri;
+} catch {
+  uri = process.env.uri;
+}
+
   
 const port = 8000;
 const app = express();
@@ -16,7 +23,7 @@ const postsRoute = require('./routes/posts')
 app.use('/posts', postsRoute)
 
 
-mongoose.connect(process.env.MONGO_URI, () => {
+mongoose.connect(uri, () => {
   console.log("connected to db")
 })
 
