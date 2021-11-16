@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require ('dotenv/config')
+//require ('dotenv/config') //not in package.json, error at runtime
 const path = require('path'), //dependencies
     express = require('express'),
     morgan = require('morgan'),
