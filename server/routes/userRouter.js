@@ -1,9 +1,15 @@
 const express = require('express'),
     userRouter = new express.Router(),
     userController = require('../controllers/userController.js'),
-    User = require('../schemas/userModel.js');
-    jwt = require('jsonwebtoken'),
+    User = require('../schemas/userModel.js'),
+    jwt = require('jsonwebtoken');
+
+let jwt_secret;
+try {
     jwt_secret = require('../config/config.js').secret;
+} catch {
+    jwt_secret = process.env.secret;
+}
 
 // function to verify tokens 
 //should probably be moved to a separate jwt file
