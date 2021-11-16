@@ -1,7 +1,13 @@
 const User = require('../schemas/userModel.js')
 const jwt = require('jsonwebtoken')
-const jwt_secret = require('../config/config.js').secret
 const uuid = require('uuid');
+
+let jwt_secret;
+try {
+    jwt_secret = require('../config/config.js').secret;
+} catch {
+    jwt_secret = process.env.secret;
+}
 
 
 // function to create tokens
