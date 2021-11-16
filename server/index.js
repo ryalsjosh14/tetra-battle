@@ -1,9 +1,20 @@
+//require ('dotenv/config')
+const path = require('path'); //dependencies
+const express = require('express');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
-//require ('dotenv/config') //not in package.json, error at runtime
-const path = require('path'), //dependencies
-    express = require('express'),
-    morgan = require('morgan'),
-    express_ws = require('express-ws');
+const bodyParser = require('body-parser');
+const cors=require("cors");
+
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+ }
+
+const postsRoute = require('./routes/posts')
+const userRouter = require('./routes/userRouter')
+const settingsRouter = require('./routes/settingsRouter')
 
 let uri;
 try {
@@ -11,21 +22,24 @@ try {
 } catch {
   uri = process.env.uri;
 }
-
   
 const port = 8000;
 const app = express();
+app.use(cors(corsOptions))
 app.use(morgan('dev')); //wrapping express
+app.use(bodyParser.json());
 
+//Connect to mongo
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(connect => console.log("Connected to MongoDB"))
+.catch(e => console.log("Could not connect to MongoDB", e));
 
-const postsRoute = require('./routes/posts')
-
+//Use routers
 app.use('/posts', postsRoute)
+app.use('/users', userRouter)
+app.use('/settings', settingsRouter)
 
-
-mongoose.connect(uri, () => {
-  console.log("connected to db")
-})
-
-
+//Listen
 app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));
