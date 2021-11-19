@@ -1,10 +1,10 @@
 //import
 import { useState, useContext } from "react"
-import { userContext } from "../UserContext"
+import { UserContext } from "../UserContext"
 
 const Login = (props) => {
 
-    const {currentUser, setCurrentUser} = useContext(userContext);
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
@@ -18,7 +18,8 @@ const Login = (props) => {
         setUserName(event.target.value)
     }
 
-    const onSubmit = () => {
+    const onSubmit = (event) => {
+        event.preventDefault();
         console.log(userName)
         const update = {
             username: userName,
@@ -36,7 +37,18 @@ const Login = (props) => {
 
         fetch('http://localhost:8000/users/authenticate/', options)
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data)
+            if(data.success){
+                console.log("successful login")
+                setCurrentUser(data.user)
+            }
+            else{
+                console.log("failed login")
+                alert("invalid login, please try again")
+            }
+        })
+        
         .catch(error => console.log(error));
 
     }
