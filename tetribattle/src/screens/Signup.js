@@ -14,7 +14,8 @@ const Signup = (props) => {
         setUserName(event.target.value)
     }
 
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault();
         console.log(userName)
         const update = {
             username: userName,
