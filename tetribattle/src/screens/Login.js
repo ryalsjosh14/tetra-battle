@@ -58,14 +58,15 @@ const Login = (props) => {
             <div className='container'>
                 <div className='form-div'>
                     <form>
+                        <p>Username</p>
                         <input type='text' onChange={changeUsername} value={userName} className="form-control form-group"></input>
+                        <p>Password</p>
                         <input type='text' onChange={changePassword} value={password} className="form-control form-group"></input>
-                        <button onClick={onSubmit}>Sign In</button>
+                        <p><button onClick={onSubmit}>Sign In</button></p>
                     </form>
-
                 </div>
             </div>
-            <p>Don't have an acount?</p>
+            <p>Don't have an account?</p>
             <a href='/signup'>Sign up!</a>
         </div>
     );

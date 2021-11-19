@@ -56,9 +56,11 @@ const Signup = (props) => {
             <div className='container'>
                 <div className='form-div'>
                     <form>
+                        <p>Username</p>
                         <input type='text' onChange={changeUsername} value={userName} className="form-control form-group"></input>
+                        <p>Password</p>
                         <input type='text' onChange={changePassword} value={password} className="form-control form-group"></input>
-                        <button onClick={onSubmit}> Create Account</button>
+                        <p><button onClick={onSubmit}> Create Account</button></p>
                     </form>
 
                 </div>
