@@ -34,7 +34,7 @@ const Login = (props) => {
             body: JSON.stringify(update),
         };
 
-        fetch('http://localhost:8000/users/authenticate/', options)
+        fetch(window.location.protocol + "//" + window.location.host + '/users/authenticate/', options)
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));

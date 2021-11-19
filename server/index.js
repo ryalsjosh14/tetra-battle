@@ -67,7 +67,7 @@ wsServer.on('connection', (webSocket, req) => { // when a player connects
     const id = parseInt(req.url.substr(1)); // get their id (from url)
     wsConnections[id] = webSocket; // store as an active connection
 
-    console.log("user " + id + " connected\n" + webSocket);
+    console.log("user " + id + " connected\n");
 
     webSocket.on('message', (msg) => { // when a message is received
       console.log("received: " + msg);

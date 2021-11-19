@@ -30,7 +30,7 @@ const Signup = (props) => {
             body: JSON.stringify(update),
         };
 
-        fetch('http://localhost:8000/users/create/', options)
+        fetch(window.location.protocol + "//" + window.location.host + '/users/create/', options)
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));
