@@ -7,7 +7,7 @@ const Room = (props) => {
         userID = 2; //temp for testing
         console.log('user ' + userID + ' joined room\n');
         gameID = props.match.params.id;
-        fetch(String(window.location.protocol) + "//" + window.location.host + '/game/update/' + String(gameID) + "&" + userID, {method: 'PATCH'})
+        fetch(String(window.location.protocol) + "//" + window.location.hostname + ':8000/game/update/' + String(gameID) + "&" + userID, {method: 'PATCH'})
         .then(response => response.json())
         .then(data => console.log())
         .catch(error => console.log(error));
@@ -15,10 +15,11 @@ const Room = (props) => {
     }
     else {
         //***CHECK IF CREATED GAME WOULD BE DUPLICATE;;; crashes server rn :/
-        console.log(window.location.protocol + "//" + window.location.host + '/game/create/' + props.id + "&" + userID);
-        fetch(window.location.protocol + "//" + window.location.host + '/game/create/' + props.id + "&" + userID, {method: 'GET', headers: {'Content-Type': 'text/html'}})
+        console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID);
+        //, headers: {'Content-Type': 'text/html'}
+        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID, {method: 'GET'})
         .then(response => response.json())
-        .then(data => console.log())
+        .then(data => console.log(data))
         .catch(error => console.log(error));
         gameID = props.id;
     }

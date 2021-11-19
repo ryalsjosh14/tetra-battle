@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext"
 
 const Login = (props) => {
 
-    const {currentUser, setCurrentUser} = useContext(UserContext);
+    //const {currentUser, setCurrentUser} = useContext(UserContext);
 
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
@@ -34,7 +34,7 @@ const Login = (props) => {
             body: JSON.stringify(update),
         };
 
-        fetch(window.location.protocol + "//" + window.location.host + '/users/authenticate/', options)
+        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/authenticate/', options)
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.log(error));
