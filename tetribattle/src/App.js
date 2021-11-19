@@ -6,7 +6,7 @@ import Room from './screens/Room';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Settings from './screens/Settings';
-import UserContext from './UserContext';
+import { UserContext } from './UserContext';
 import './App.css';
 
 
