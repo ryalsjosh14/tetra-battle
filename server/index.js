@@ -12,9 +12,10 @@ const corsOptions ={
     optionSuccessStatus:200,
  }
 
-const postsRoute = require('./routes/posts')
-const userRouter = require('./routes/userRouter')
-const settingsRouter = require('./routes/settingsRouter')
+const postsRoute = require('./routes/posts');
+const userRouter = require('./routes/userRouter');
+const settingsRouter = require('./routes/settingsRouter');
+const gameRouter = require('./routes/gameRouter');
 
 let uri;
 try {
@@ -25,7 +26,7 @@ try {
   
 const port = 8000;
 const app = express();
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
 app.use(morgan('dev')); //wrapping express
 app.use(bodyParser.json());
 
@@ -37,9 +38,10 @@ mongoose.connect(uri, {
 .catch(e => console.log("Could not connect to MongoDB", e));
 
 //Use routers
-app.use('/posts', postsRoute)
-app.use('/users', userRouter)
-app.use('/settings', settingsRouter)
+app.use('/posts', postsRoute);
+app.use('/users', userRouter);
+app.use('/settings', settingsRouter);
+app.use('/game', gameRouter);
 
 //Listen
 app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));

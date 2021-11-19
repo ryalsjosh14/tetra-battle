@@ -7,6 +7,7 @@ const Room = (props) => {
     if(props.id === null) {
         console.log('joined room\n');
         props.id = this.props.match.params.id;
+        //send post request to game/update?user2={USER ID};
     }
 
     //CONNECT TO WEB SOCKET SERVER
