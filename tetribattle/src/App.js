@@ -45,6 +45,11 @@ function App() {
           return <Room {...props} id={genId()}/>
         }}/>
 
+        <Route path="/join_room/:id" render={(props) => { /* CANT GET THIS TO TRIGGER BADBADBAD */
+          /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
+          return <Room {...props} id={null}/> // can pass within url and fetch id from within room
+        }}/>
+
         <Route path="/login" render={(props) => {
           return <Login {...props}/>
         }}/>
@@ -56,6 +61,8 @@ function App() {
         <Route path="/settings" render={(props) => {
           return <Settings {...props}/>
         }}/>
+
+        <Route path='*' component={Home} /> {/*if page not found*/}
       </Switch>
       {/*</UserContext.Provider> */}
     </div>

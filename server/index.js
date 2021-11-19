@@ -43,3 +43,33 @@ app.use('/settings', settingsRouter)
 
 //Listen
 app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));
+
+
+
+/* WEB SOCKET SERVER */
+
+const ws = require('ws');
+
+var wsServer = new ws.Server({port: 5000}); // initialize server
+var wsConnections = []; // store all active connections
+
+//TODO****************************************************************
+// MAKE DB ENTRY FOR EACH GAME
+// (slow) ON MESSAGE, LOOK THEM UP FROM DB AND SEND TO THEM USING {wsConnections[id_from_db]}
+// IDEALLY, FIND SOME WAY TO CACHE THIS, OR EVEN BETTER JUST PASS THE OTHER USERS ID IN THE URL
+// HOWEVER, THAT REQUIRES REACT ROOM.js TO KNOW THE ID OF THE OTHER PLAYER, 
+// WHICH CAN ONLY BE DONE IF blah blah idc anymore just do the slow way for now and implement a handshake later kasdlkjasdlkjasdlkj
+//TODO****************************************************************
+
+wsServer.on('connection', (webSocket, req) => { // when a player connects
+    const id = parseInt(req.url.substr(1)); // get their id (from url)
+    wsConnections[id] = webSocket; // store as an active connection
+
+    console.log("user " + id + " connected\n" + webSocket);
+
+    webSocket.on('message', (msg) => { // when a message is received
+      console.log("received: " + msg);
+  });
+});
+
+
