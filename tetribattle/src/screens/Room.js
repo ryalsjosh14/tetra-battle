@@ -2,16 +2,41 @@ const Room = (props) => {
 
     let userID = 1; // get from user context
     let gameID;
-    //if joining another player's room, get the id from the url
+    let otherUserID;
+
+    //CONNECT TO WEB SOCKET SERVER
+
+    let socket;
+    if (props.id !== null) //temp for testing
+        socket = new WebSocket('ws://' + window.location.hostname + ':5000/' + userID);
+
+    const ping = () => { // just for testing
+        console.log('pinging...\n');
+        socket.send('hi from: ' + gameID);
+    }
+
+    const sendMessage = (msg) => {
+        socket.send(otherUserID + " " + msg);
+    }
+
+    const handshake = async () => {
+        let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID, {method: 'GET'});
+        data = await data.json();
+        
+        otherUserID = data.user1; // store partners ID for websocket communications
+        sendMessage("-999 " + userID); // send ID to partner
+    }
+
     if(props.id === null) {
         userID = 2; //temp for testing
+        socket = new WebSocket('ws://' + window.location.hostname + ':5000/' + userID); // temp for testing
         console.log('user ' + userID + ' joined room\n');
-        gameID = props.match.params.id;
-        fetch(String(window.location.protocol) + "//" + window.location.hostname + ':8000/game/update/' + String(gameID) + "&" + userID, {method: 'PATCH'})
+        gameID = props.match.params.id; // save game id
+        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID + "&" + userID, {method: 'PATCH'})
         .then(response => response.json())
         .then(data => console.log())
-        .catch(error => console.log(error));
-        
+        .catch(error => console.log(error))
+        .then(handshake()); // second player to join initiates handshake       
     }
     else {
         //***CHECK IF CREATED GAME WOULD BE DUPLICATE;;; crashes server rn :/
@@ -22,19 +47,6 @@ const Room = (props) => {
         .then(data => console.log(data))
         .catch(error => console.log(error));
         gameID = props.id;
-    }
-
-    //CONNECT TO WEB SOCKET SERVER
-
-    const socket = new WebSocket("ws://localhost:5000/" + userID);
-
-    socket.onmessage = (msg) => {
-        console.log(msg);
-    };
-
-    const ping = () => {
-        console.log('pinging...\n');
-        socket.send('hi from: ' + gameID);
     }
 
     /*const test = async () => {
@@ -48,14 +60,26 @@ const Room = (props) => {
         }
     }*/
 
+    socket.onmessage = (msg) => {
+        if(parseInt(msg.data) === -999) { // for completing the hanshake
+            otherUserID = parseInt(msg.data.substr(5));
+        }
+        console.log("received: " + msg.data); // basic logging in js console
+    };
 
     return(
         <div>
             <p>Set options for game here, before actually going to the gameplay room?</p>
             <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameID}</p>
 
-            <button onClick={ping}>Test web socket...</button>
+            {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}
+            <input type="text" onKeyPress={(e) => { 
+                if(e.key === 'Enter') {
+                    sendMessage(e.target.value); // whatever was typed in gets sent on enter press
+                    e.target.value = "";
+                }
+            }}></input>
         </div>
     )
 }

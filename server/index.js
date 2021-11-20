@@ -44,7 +44,7 @@ app.use('/settings', settingsRouter);
 app.use('/game', gameRouter);
 
 //Listen
-app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));
+app.listen(process.env.PORT || port, () => console.log('Listening on: http://localhost:' + port + '/'));
 
 
 
@@ -71,6 +71,7 @@ wsServer.on('connection', (webSocket, req) => { // when a player connects
 
     webSocket.on('message', (msg) => { // when a message is received
       console.log("received: " + msg);
+      wsConnections[parseInt(msg)].send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
   });
 });
 
