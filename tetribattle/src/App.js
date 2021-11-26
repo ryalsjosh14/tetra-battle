@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Route, Switch, Redirect  } from 'react-router-dom';
 import AppBar from './NavBar';
 import Home from './screens/Home';
@@ -12,10 +12,21 @@ import './App.css';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-/*   const getUser = () => {
+  //console.log(currentUser.username)
+  // console.log(localStorage.getItem("user"))
 
-  } */
+  useEffect(() => {
+    if(localStorage.getItem('user')) {
+      setCurrentUser(JSON.parse(localStorage.getItem('user')));
+    }
+  }, []);
+  
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(currentUser));
+  }, [currentUser]);
 
+  //const value = useMemo(() => ({ currentUser, setCurrentUser }), [currentUser, setCurrentUser])
+  const value = {currentUser, setCurrentUser}
   function genId() {
     let res = "";
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -26,9 +37,10 @@ function App() {
     return res;
   }
 
+
   return (
     <div className="App">
-      <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+      <UserContext.Provider value={value}>
         <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
 
         <Switch>

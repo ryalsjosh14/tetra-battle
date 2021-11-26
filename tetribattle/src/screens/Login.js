@@ -41,7 +41,12 @@ const Login = (props) => {
             console.log(data)
             if(data.success){
                 console.log("successful login")
+                console.log(data.user)
                 setCurrentUser(data.user)
+                //localStorage.setItem("user", JSON.stringify(currentUser))
+
+                //console.log(data.user)
+                //console.log(JSON.parse(localStorage.getItem("user")))
             }
             else{
                 console.log("failed login")
