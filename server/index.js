@@ -4,11 +4,14 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors=require("cors");
+const cors = require("cors");
+const { uri }= require("./config/config")
+
 
 const corsOptions ={
     origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,            
+    //access-control-allow-credentials:true,
     optionSuccessStatus:200,
  }
 
@@ -22,8 +25,10 @@ app.use(cors(corsOptions))
 app.use(morgan('dev')); //wrapping express
 app.use(bodyParser.json());
 
+console.log(uri)
+
 //Connect to mongo
-mongoose.connect(require('./config/config.js').uri, {
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(connect => console.log("Connected to MongoDB"))

@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
 // adds method to user to create hashed password
 userSchema.methods.generateHash = function(password) {
     console.log("running generate hash")
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
+    const res = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
+    console.log("about to return from generate hash")
+    return res;
 };
 
 // adds method to user to check if password is correct
@@ -24,6 +26,7 @@ userSchema.pre('save', function(next) {
     console.log("running pre save")
     if(this.isModified('password')) {
         this.password = this.generateHash(this.password);
+        console.log("hash = " + this.password)
     }
     next();
 });
