@@ -4,11 +4,14 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors=require("cors");
+const cors = require("cors");
+//const { uri }= require("./config/config") // declared further down as config/config.js
+
 
 const corsOptions ={
     origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,            
+    //access-control-allow-credentials:true,
     optionSuccessStatus:200,
  }
 
@@ -29,6 +32,8 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(morgan('dev')); //wrapping express
 app.use(bodyParser.json());
+
+console.log(uri)
 
 //Connect to mongo
 mongoose.connect(uri, {

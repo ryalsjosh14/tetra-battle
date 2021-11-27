@@ -12,8 +12,11 @@ try {
 
 // function to create tokens
 function signToken(user) {
+    console.log("in sign token")
     const userData = user.toObject();
     delete userData.password;
+    console.log("about to leave sign token")
+
     return jwt.sign(userData, jwt_secret)
 }
 
@@ -61,7 +64,7 @@ module.exports = {
 
             console.log("almost finished create")
 
-            return res.json({success: true, message: "User created with token", token});
+            return res.json({success: true, message: "User created with token", token, user: user});
         } catch(err) {
             return res.json({success: false, code: err.code});
         }
@@ -94,7 +97,9 @@ module.exports = {
     },
 
     authenticate: async (req, res) => { //on page load, put token in local storage
+        console.log(req.body.username)
         const user = await User.findOne({username: req.body.username});
+        console.log(user)
 
         if(!user || !user.validPassword(req.body.password)) {
             console.log("about to return failure")
@@ -104,6 +109,6 @@ module.exports = {
         const token = await signToken(user);
         
         console.log("about to return success")
-        return res.json({success: true, message: "Token attached", token});
+        return res.json({success: true, message: "Token attached", token, user: user});
     }
 };

@@ -4,7 +4,7 @@ import { UserContext } from "../UserContext"
 
 const Login = (props) => {
 
-    //const {currentUser, setCurrentUser} = useContext(UserContext);
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
@@ -18,7 +18,8 @@ const Login = (props) => {
         setUserName(event.target.value)
     }
 
-    const onSubmit = () => {
+    const onSubmit = (event) => {
+        event.preventDefault();
         console.log(userName)
         const update = {
             username: userName,
@@ -36,7 +37,23 @@ const Login = (props) => {
 
         fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/authenticate/', options)
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data)
+            if(data.success){
+                console.log("successful login")
+                console.log(data.user)
+                setCurrentUser(data.user)
+                //localStorage.setItem("user", JSON.stringify(currentUser))
+
+                //console.log(data.user)
+                //console.log(JSON.parse(localStorage.getItem("user")))
+            }
+            else{
+                console.log("failed login")
+                alert("invalid login, please try again")
+            }
+        })
+        
         .catch(error => console.log(error));
 
     }
@@ -46,14 +63,15 @@ const Login = (props) => {
             <div className='container'>
                 <div className='form-div'>
                     <form>
+                        <p>Username</p>
                         <input type='text' onChange={changeUsername} value={userName} className="form-control form-group"></input>
+                        <p>Password</p>
                         <input type='text' onChange={changePassword} value={password} className="form-control form-group"></input>
-                        <button onClick={onSubmit}>Sign In</button>
+                        <p><button onClick={onSubmit}>Sign In</button></p>
                     </form>
-
                 </div>
             </div>
-            <p>Don't have an acount?</p>
+            <p>Don't have an account?</p>
             <a href='/signup'>Sign up!</a>
         </div>
     );
