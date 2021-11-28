@@ -32,7 +32,7 @@ function App() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     for (let i = 0; i < 10; i++) //create 10 character room ID
-      res += chars.at(Math.floor(Math.random() * chars.length));
+      res += chars[Math.floor(Math.random() * chars.length)];
     
     return res;
   }
