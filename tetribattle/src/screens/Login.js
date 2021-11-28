@@ -1,6 +1,6 @@
 import { useState, useContext } from "react"
 import { UserContext } from "../UserContext"
-import { Redirect } from "react-router";
+import axios from 'axios';
 
 const Login = (props) => {
 
@@ -35,27 +35,31 @@ const Login = (props) => {
             },
             body: JSON.stringify(update),
         };
+        
+        axios.post(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate', update)
+            .then(res => console.log(res.data));
 
-        fetch(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if(data.success){
-                console.log("successful login");
-                console.log(data.user);
-                setCurrentUser(data.user);
-                //localStorage.setItem("user", JSON.stringify(currentUser))
 
-                //console.log(data.user)
-                //console.log(JSON.parse(localStorage.getItem("user")))
-                props.history.push("/home"); // send back to home page
-            }
-            else{
-                console.log("failed login");
-                alert("Invalid login. Please try again.");
-            }
-        })       
-        .catch(error => console.log(error));
+        // fetch(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options)
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log(data);
+        //     if(data.success){
+        //         console.log("successful login");
+        //         console.log(data.user);
+        //         setCurrentUser(data.user);
+        //         //localStorage.setItem("user", JSON.stringify(currentUser))
+
+        //         //console.log(data.user)
+        //         //console.log(JSON.parse(localStorage.getItem("user")))
+        //         props.history.push("/home"); // send back to home page
+        //     }
+        //     else{
+        //         console.log("failed login");
+        //         alert("Invalid login. Please try again.");
+        //     }
+        // })       
+        // .catch(error => console.log(error));
 
     }
     
