@@ -37,10 +37,11 @@ const Signup = (props) => {
         fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/create/', options)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
             if(data.success){
-                console.log("successful creation")
-                setCurrentUser(data.user)
+                console.log("successful creation");
+                setCurrentUser(data.user);
+                console.log(currentUser);
                 props.history.push("/home");
             }
             else{

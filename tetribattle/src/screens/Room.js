@@ -1,78 +1,98 @@
 import { UserContext } from "../UserContext";
-import { useContext } from "react";
-
+import { useContext, useEffect, useCallback, useRef } from "react";
+//TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
 const Room = (props) => {
 
-    const { currentUser, setCurrentUser } = useContext(UserContext);
+    const { currentUser } = useContext(UserContext);
 
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
-    let userID = 1; // get from user context
-    let gameID;
-    let otherUserID;
+    const userID = useRef(null); // get from user context
+    const gameID = useRef(null);
+    const otherUserID = useRef(null);
+    const socket = useRef(null);
 
-    //CONNECT TO WEB SOCKET SERVER
-    let socket;
-    if (props.id !== null) //temp for testing
-        socket = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID);
 
-    const sendMessage = (msg) => {
-        console.log("sending")
-        socket.send(otherUserID + " " + msg);
+    const getIdAsInteger = (id) => { // for storing UID in database
+        let sum = 0;
+        for (let i = 0; i < id.length; i++) {
+            sum += id.charCodeAt(i);
+        }
+
+        return sum;
     }
 
-    const handshake = async () => {
-        let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID, {method: 'GET'});
+    const handshake = async () => { // handshake with other web socket
+        let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
         
-        otherUserID = data.user1; // store partners ID for websocket communications
-        sendMessage("-999 " + userID); // send ID to partner
+        otherUserID.current = data.user1; // store partners ID for websocket communications
+        sendMessage("-999 " + userID.current); // send ID to partner
     }
 
-    if(props.id === null) {
-        userID = 2; //temp for testing
-        socket = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID); // temp for testing
-        console.log('user ' + userID + ' joined room\n');
-        gameID = props.match.params.id; // save game id
-        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID + "&" + userID, {method: 'PATCH'})
-        .then(response => response.json())
-        .then(data => console.log())
-        .catch(error => console.log(error))
-        .then(handshake()); // second player to join initiates handshake       
-    }
-    else {
-        //***CHECK IF CREATED GAME WOULD BE DUPLICATE;;; crashes server rn :/
-        console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID);
-        //, headers: {'Content-Type': 'text/html'}
-        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID, {method: 'GET'})
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
-        gameID = props.id;
-    }
+    const sendMessage = useCallback((msg) => { // send a message to the wsServer
+        console.log("sending")
+        socket.current.send(otherUserID.current + " " + msg);
+    }, [otherUserID, socket]); // TODO CHECK THESE DEPENDENCIES
 
-    /*const test = async () => {
-        let created = await fetch(window.location.protocol + "//" + window.location.host + '/game/' + props.id, {method: 'GET'});
-        console.log(created);
-        if(created == null) {
-            fetch(window.location.protocol + "//" + window.location.host + '/game/create/' + props.id + "&" + userID, {method: 'GET'})
+
+
+    //TODO*** encapsulate the whole process in a function to run on browser load/after currentUser is passed with useEffect() [currentUser]
+    useEffect(() => {
+        if(!currentUser) //only run if currentUser has been updated
+            return;
+
+        // console.log("id: " + props.id);
+        const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
+            let created = await fetch(window.location.protocol + "//" + window.location.host + '/game/' + props.id, {method: 'GET'});
+            console.log(created);
+            if(created == null)
+                return true;
+        }
+
+        userID.current = getIdAsInteger(currentUser.UID); // get from user context
+
+        //CONNECT TO WEB SOCKET SERVER
+        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID.current);
+
+        socket.current.onmessage = (msg) => { //when receiving a message
+            if(parseInt(msg.data) === -999) { // for completing the hanshake
+                otherUserID.current = parseInt(msg.data.substr(5));
+            }
+            console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
+            alert("received: " + msg.data + " from userID: " + otherUserID.current);
+        };
+
+
+        console.log(socket.current);
+        if(props.id === null) { // if second user on webpage
+            console.log('user ' + userID.current + ' joined room\n');
+            console.log(props.match.params.id);
+            gameID.current = props.match.params.id; // save game id
+            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
             .then(data => console.log())
-            .catch(error => console.log(error));
+            .catch(error => console.log(error))
+            .then(handshake()); // second player to join initiates handshake       
         }
-    }*/
+        else { //first user on webpage
+            if(!testDuplicate)
+                return;
+            //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
 
-    socket.onmessage = (msg) => {
-        if(parseInt(msg.data) === -999) { // for completing the hanshake
-            otherUserID = parseInt(msg.data.substr(5));
+            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error));
+            gameID.current = props.id;
         }
-        console.log("received: " + msg.data); // basic logging in js console
-    };
+    }, [currentUser]); // run only once on load
+
+
 
     return(
         <div>
-            <p>Set options for game here, before actually going to the gameplay room?</p>
-            <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameID}</p>
+            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}

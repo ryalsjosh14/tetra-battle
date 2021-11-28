@@ -38,7 +38,7 @@ const NavBar = (props) => {
           <Button color="inherit" href="/room" style={{display: 'flex', justifyContent:'flex-end'}}>Play</Button>
           <Button color="inherit" href="/settings" style={{display: 'flex', justifyContent:'flex-end'}}>Settings</Button>
           {loginButton}
-          { currentUser ? <Button color="inherit" style={{display: 'flex', justifyContent:'flex-end'}} onClick={LogOut}> Logout </Button> : <h1></h1>}
+          { currentUser ? <Button color="inherit" style={{display: 'flex', justifyContent:'flex-end'}} onClick={LogOut}> Logout </Button> : <p></p>}
         </Toolbar>
       </AppBar>
     </Box>

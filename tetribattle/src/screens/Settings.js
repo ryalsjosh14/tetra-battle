@@ -1,14 +1,14 @@
-import { useState } from 'react';
+//import { useState } from 'react';
 import { Slider, Grid, Box, Typography } from '@material-ui/core';
 
 //hook to update props.user.settings on form submit here
 
 const Settings = (props) => {
     //ON PAGE LOAD: need to find a way to set state of form elements based on what comes from the stored user config
-    const [val_DAS, set_DAS] = useState(5);
-    const set_DAS_handler = (e, new_val) => {
-        set_DAS(new_val);
-    }
+    // const [val_DAS, set_DAS] = useState(5);
+    // const set_DAS_handler = (e, new_val) => {
+    //     set_DAS(new_val);
+    // }
 
     return(
         <form>
