@@ -4,6 +4,7 @@ import { Redirect } from "react-router";
 
 const Login = (props) => {
 
+    const lPort = process.env.PORT || 8000;
     const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const [userName, setUserName] = useState("");
@@ -35,7 +36,7 @@ const Login = (props) => {
             body: JSON.stringify(update),
         };
 
-        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/authenticate/', options)
+        fetch(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options)
         .then(response => response.json())
         .then(data => {
             console.log(data);
