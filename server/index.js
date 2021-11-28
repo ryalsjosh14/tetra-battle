@@ -49,10 +49,14 @@ app.use('/settings', settingsRouter);
 app.use('/game', gameRouter);
 
 //build
-app.use(express.static(path.join(__dirname, '../build')))
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build'))
-})
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../tetribattle/build')));
+
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
+  });
+}
 
 //Listen
 const listenPort = process.env.PORT || port;
