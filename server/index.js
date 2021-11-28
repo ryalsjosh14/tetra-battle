@@ -49,7 +49,9 @@ app.use('/settings', settingsRouter);
 app.use('/game', gameRouter);
 
 //Listen
-app.listen(port, () => console.log('Listening on: http://localhost:' + port + '/'));
+const listenPort = process.env.PORT || port;
+console.log(process.env.PORT + ", " + port);
+app.listen(listenPort, () => console.log('Listening on: http://localhost:' + port + '/'));
 
 
 
