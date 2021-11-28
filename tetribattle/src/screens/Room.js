@@ -5,6 +5,8 @@ const Room = (props) => {
 
     const { currentUser, setCurrentUser } = useContext(UserContext);
 
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+
     let userID = 1; // get from user context
     let gameID;
     let otherUserID;
@@ -12,9 +14,10 @@ const Room = (props) => {
     //CONNECT TO WEB SOCKET SERVER
     let socket;
     if (props.id !== null) //temp for testing
-        socket = new WebSocket('ws://' + window.location.hostname + ':5000/' + userID);
+        socket = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID);
 
     const sendMessage = (msg) => {
+        console.log("sending")
         socket.send(otherUserID + " " + msg);
     }
 
@@ -28,7 +31,7 @@ const Room = (props) => {
 
     if(props.id === null) {
         userID = 2; //temp for testing
-        socket = new WebSocket('ws://' + window.location.hostname + ':5000/' + userID); // temp for testing
+        socket = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID); // temp for testing
         console.log('user ' + userID + ' joined room\n');
         gameID = props.match.params.id; // save game id
         fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID + "&" + userID, {method: 'PATCH'})
