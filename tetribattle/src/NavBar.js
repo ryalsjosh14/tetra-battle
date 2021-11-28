@@ -1,12 +1,12 @@
 import {AppBar, Box, Toolbar, Typography, Button, IconButton} from '@material-ui/core';
 //import { userIcon } from './assets/user.jpg';
-import { /*useState,*/ useContext } from "react"
+import { /*useState,*/ useContext } from "react";
 
-import { UserContext } from "./UserContext"
+import { UserContext } from "./UserContext";
 
 //import icons from assets folder
 
-const NavBar = () => {
+const NavBar = (props) => {
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
@@ -18,7 +18,10 @@ const NavBar = () => {
     loginButton = (<Button color="inherit" href="/login" style={{display: 'flex', justifyContent:'flex-end'}}>Login</Button>)
   }
 
-  const LogOut = () => {setCurrentUser(null)};
+  const LogOut = (props) => { //TODO redirect back to home page after logout
+    setCurrentUser(null);
+    //props.history.push('/home');
+  };
   
 
   return (

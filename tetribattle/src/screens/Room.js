@@ -1,19 +1,18 @@
+import { UserContext } from "../UserContext";
+import { useContext } from "react";
+
 const Room = (props) => {
+
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     let userID = 1; // get from user context
     let gameID;
     let otherUserID;
 
     //CONNECT TO WEB SOCKET SERVER
-
     let socket;
     if (props.id !== null) //temp for testing
         socket = new WebSocket('ws://' + window.location.hostname + ':5000/' + userID);
-
-    const ping = () => { // just for testing
-        console.log('pinging...\n');
-        socket.send('hi from: ' + gameID);
-    }
 
     const sendMessage = (msg) => {
         socket.send(otherUserID + " " + msg);

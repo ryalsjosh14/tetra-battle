@@ -1,26 +1,26 @@
-//import
 import { useState, useContext } from "react"
 import { UserContext } from "../UserContext"
+import { Redirect } from "react-router";
 
 const Login = (props) => {
 
     const { currentUser, setCurrentUser } = useContext(UserContext);
 
-    const [userName, setUserName] = useState("")
-    const [password, setPassword] = useState("")
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
 
 
     const changePassword = (event) => {
-        setPassword(event.target.value)
+        setPassword(event.target.value);
     }
 
     const changeUsername = (event) => {
-        setUserName(event.target.value)
+        setUserName(event.target.value);
     }
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log(userName)
+        console.log(userName);
         const update = {
             username: userName,
             password: password
@@ -38,22 +38,22 @@ const Login = (props) => {
         fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/authenticate/', options)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            console.log(data);
             if(data.success){
-                console.log("successful login")
-                console.log(data.user)
-                setCurrentUser(data.user)
+                console.log("successful login");
+                console.log(data.user);
+                setCurrentUser(data.user);
                 //localStorage.setItem("user", JSON.stringify(currentUser))
 
                 //console.log(data.user)
                 //console.log(JSON.parse(localStorage.getItem("user")))
+                props.history.push("/home"); // send back to home page
             }
             else{
-                console.log("failed login")
-                alert("invalid login, please try again")
+                console.log("failed login");
+                alert("Invalid login. Please try again.");
             }
-        })
-        
+        })       
         .catch(error => console.log(error));
 
     }

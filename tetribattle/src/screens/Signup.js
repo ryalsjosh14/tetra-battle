@@ -41,6 +41,7 @@ const Signup = (props) => {
             if(data.success){
                 console.log("successful creation")
                 setCurrentUser(data.user)
+                props.history.push("/home");
             }
             else{
                 console.log("failed login")

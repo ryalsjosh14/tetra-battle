@@ -5,8 +5,16 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require("cors");
-//const { uri }= require("./config/config") // declared further down as config/config.js
 
+//const { uri }= require("./config/config") // declared further down as config/config.js
+//console.log(uri);
+
+let uri;
+try {
+  uri = require("./config/config.js").uri;
+} catch {
+  uri = process.env.uri;
+}
 
 const corsOptions ={
     origin:'*', 
@@ -20,20 +28,12 @@ const userRouter = require('./routes/userRouter');
 const settingsRouter = require('./routes/settingsRouter');
 const gameRouter = require('./routes/gameRouter');
 
-let uri;
-try {
-  uri = require("./config/config.js").uri;
-} catch {
-  uri = process.env.uri;
-}
-  
+
 const port = 8000;
 const app = express();
 app.use(cors(corsOptions));
 app.use(morgan('dev')); //wrapping express
 app.use(bodyParser.json());
-
-console.log(uri)
 
 //Connect to mongo
 mongoose.connect(uri, {
@@ -59,6 +59,7 @@ const ws = require('ws');
 
 var wsServer = new ws.Server({port: 5000}); // initialize server
 var wsConnections = []; // store all active connections
+//const wsConnections = new Map();
 
 //TODO****************************************************************
 // MAKE DB ENTRY FOR EACH GAME
@@ -80,4 +81,18 @@ wsServer.on('connection', (webSocket, req) => { // when a player connects
   });
 });
 
+//new id system below
+
+// wsServer.on('connection', (webSocket, req) => { // when a player connects
+//   console.log(req.url)
+//     const id = req.url.substr(0,req.url.indexOf(' ')); // get their id (from url)
+//     wsConnections.set(id, webSocket); // store as an active connection
+
+//     console.log("user " + id + " connected\n");
+
+//     webSocket.on('message', (msg) => { // when a message is received
+//       console.log("received: " + msg);
+//       wsConnections.get(substr(0,msg.indexOf(' '))).send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
+//   });
+// });
 
