@@ -48,10 +48,16 @@ app.use('/users', userRouter);
 app.use('/settings', settingsRouter);
 app.use('/game', gameRouter);
 
+//build
+app.use(express.static(path.join(__dirname, '../build')))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../build'))
+})
+
 //Listen
 const listenPort = process.env.PORT || port;
 console.log(process.env.PORT + ", " + port);
-app.listen(listenPort, () => console.log('Listening on: http://localhost:' + port + '/'));
+app.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
 
 
 
