@@ -1,7 +1,71 @@
 import { UserContext } from "../UserContext";
-import { useContext, useEffect, useCallback, useRef } from "react";
+import { useContext, useState, useEffect, useCallback, useRef } from "react";
+
+//Perry Add
+import React from "react";
+import Unity, { UnityContext} from "react-unity-webgl";
+//End Perry Add
+
+const unityContext = new UnityContext({
+loaderUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+dataUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+frameworkUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+codeUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+});
+
+
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
+
 const Room = (props) => {
+
+  //Perry Add
+
+
+    const [isGameOver, setIsGameOver] = useState(false);
+    const [gridString, setGridString] = useState("");
+    const [didError, setDidError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    var playerNbr = 1;
+
+
+    useState(function () {
+      unityContext.on("GameOver", function () {
+        setIsGameOver(true);
+        });
+      }, []);
+
+    useState(function () {
+      unityContext.on("NextPlayer", function (gridString) {
+        setGridString(gridString);
+        /*if (playerNbr === 1)
+        {
+          playerNbr = 2;
+          unityContext.send("Player2Spawner", "nextPlayer", gridString);
+        }
+        else {
+          playerNbr = 1;
+          unityContext.send("Player1Spawner", "nextPlayer", gridString);
+        }*/
+
+        });
+      }, []);
+
+    function Player2NextTurn()
+        {
+        console.log("Player 2 clicked");
+        unityContext.send("Player2Spawner", "nextPlayer", gridString);
+        }
+
+    function Player1NextTurn()
+        {
+        console.log("Player 1 clicked");
+        unityContext.send("Player1Spawner", "nextPlayer", gridString);
+        }
+
+
+
+  //End Perry Add
+
 
     const { currentUser } = useContext(UserContext);
 
@@ -25,7 +89,7 @@ const Room = (props) => {
     const handshake = async () => { // handshake with other web socket
         let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
-        
+
         otherUserID.current = data.user1; // store partners ID for websocket communications
         sendMessage("-999 " + userID.current); // send ID to partner
     }
@@ -73,7 +137,7 @@ const Room = (props) => {
             .then(response => response.json())
             .then(data => console.log())
             .catch(error => console.log(error))
-            .then(handshake()); // second player to join initiates handshake       
+            .then(handshake()); // second player to join initiates handshake
         }
         else { //first user on webpage
             if(!testDuplicate)
@@ -89,19 +153,31 @@ const Room = (props) => {
     }, [currentUser]); // run only once on load
 
 
-
     return(
         <div>
             {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}
-            <input type="text" onKeyPress={(e) => { 
+            <input type="text" onKeyPress={(e) => {
                 if(e.key === 'Enter') {
                     sendMessage(e.target.value); // whatever was typed in gets sent on enter press
                     e.target.value = "";
                 }
             }}></input>
+
+          <Unity unityContext={unityContext}
+              style={{
+                  height: "720px",
+                  width: "600px",
+                  border: "2px solid black",
+                  background: "grey",
+                  }}
+          />
+
+      <button onClick={Player1NextTurn}>Player 1 Next Turn</button>
+      <button onClick={Player2NextTurn}>Player 2 Next Turn</button>
+
         </div>
     )
 }

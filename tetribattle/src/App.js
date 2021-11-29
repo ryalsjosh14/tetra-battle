@@ -1,4 +1,4 @@
-import { useState, /*useMemo,*/ useEffect } from 'react';
+import { useState, useContext, /*useMemo,*/ useEffect } from 'react';
 import { Route, Switch, Redirect  } from 'react-router-dom';
 import AppBar from './NavBar';
 import Home from './screens/Home';
@@ -15,12 +15,13 @@ function App() {
   //console.log(currentUser.username)
   // console.log(localStorage.getItem("user"))
 
+
   useEffect(() => {
     if(localStorage.getItem('user')) {
       setCurrentUser(JSON.parse(localStorage.getItem('user')));
     }
   }, []);
-  
+
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(currentUser));
   }, [currentUser]);
@@ -33,7 +34,7 @@ function App() {
 
     for (let i = 0; i < 10; i++) //create 10 character room ID
       res += chars[Math.floor(Math.random() * chars.length)];
-    
+
     return res;
   }
 
@@ -51,7 +52,7 @@ function App() {
           <Route path="/home" render={() => {
             return <Home />
           }}/>
-          
+
           <Route path="/room" render={(props) => {
             /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
             return <Room {...props} id={genId()}/>
