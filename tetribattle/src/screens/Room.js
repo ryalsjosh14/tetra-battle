@@ -3,11 +3,10 @@ import { useContext, useEffect, useCallback, useRef } from "react";
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
 const Room = (props) => {
 
-
     const { currentUser } = useContext(UserContext);
 
     const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
-    const wsPort = window.location.protocol === 'https:' ? '' : ':5000';
+    const wsPort = window.location.protocol === 'https:' ? '' : ':3000';
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
     const userID = useRef(null); // get from user context
@@ -34,7 +33,7 @@ const Room = (props) => {
     }
 
     const sendMessage = useCallback((msg) => { // send a message to the wsServer
-        console.log("sending")
+        //console.log("sending")
         socket.current.send(otherUserID.current + " " + msg);
     }, [otherUserID, socket]); // TODO CHECK THESE DEPENDENCIES
 
@@ -67,10 +66,9 @@ const Room = (props) => {
         };
 
 
-        console.log(socket.current);
         if(props.id === null) { // if second user on webpage
-            console.log('user ' + userID.current + ' joined room\n');
-            console.log(props.match.params.id);
+            //console.log('user ' + userID.current + ' joined room\n');
+            //console.log(props.match.params.id);
             gameID.current = props.match.params.id; // save game id
             fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
@@ -85,7 +83,7 @@ const Room = (props) => {
 
             fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {return}/*console.log(data)*/)
             .catch(error => console.log(error));
             gameID.current = props.id;
         }

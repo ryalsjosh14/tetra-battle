@@ -29,7 +29,6 @@ const settingsRouter = require('./routes/settingsRouter');
 const gameRouter = require('./routes/gameRouter');
 
 
-const port = 8000;
 const app = express();
 app.use(cors(corsOptions));
 app.use(morgan('dev')); //wrapping express
@@ -59,8 +58,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //Listen
-const listenPort = process.env.PORT || port;
-console.log(process.env.PORT + ", " + port);
+const listenPort = process.env.PORT || 8000;
 app.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
 
 
@@ -69,7 +67,7 @@ app.listen(listenPort, () => console.log('Listening on: http://localhost:' + lis
 
 const ws = require('ws');
 
-var wsServer = new ws.Server({port: 5000}); // initialize server
+var wsServer = new ws.Server({ server: app }); // initialize server
 var wsConnections = []; // store all active connections
 //const wsConnections = new Map();
 
