@@ -3,9 +3,11 @@ import { useContext, useEffect, useCallback, useRef } from "react";
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
 const Room = (props) => {
 
-    const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
+
     const { currentUser } = useContext(UserContext);
 
+    const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
+    const wsPort = window.location.protocol === 'https:' ? '' : ':5000';
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
     const userID = useRef(null); // get from user context
@@ -54,7 +56,7 @@ const Room = (props) => {
         userID.current = getIdAsInteger(currentUser.UID); // get from user context
 
         //CONNECT TO WEB SOCKET SERVER
-        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID.current);
+        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + wsPort + '/' + userID.current);
 
         socket.current.onmessage = (msg) => { //when receiving a message
             if(parseInt(msg.data) === -999) { // for completing the hanshake
@@ -93,7 +95,7 @@ const Room = (props) => {
 
     return(
         <div>
-            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.hostname + "/join_room/" + props.id}</p> : <p></p>}
+            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}
