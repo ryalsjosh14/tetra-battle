@@ -39,7 +39,7 @@ const Login = (props) => {
         // axios.post(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate', update)
         //     .then(res => console.log(res.data));
 
-
+        console.log(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options);
         fetch(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options)
         .then(response => response.json())
         .then(data => {
