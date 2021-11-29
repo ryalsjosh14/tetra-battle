@@ -3,6 +3,7 @@ import { useContext, useEffect, useCallback, useRef } from "react";
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
 const Room = (props) => {
 
+    const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
     const { currentUser } = useContext(UserContext);
 
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
@@ -23,7 +24,7 @@ const Room = (props) => {
     }
 
     const handshake = async () => { // handshake with other web socket
-        let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current, {method: 'GET'});
+        let data = await fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
         
         otherUserID.current = data.user1; // store partners ID for websocket communications
@@ -44,7 +45,7 @@ const Room = (props) => {
 
         // console.log("id: " + props.id);
         const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
-            let created = await fetch(window.location.protocol + "//" + window.location.host + '/game/' + props.id, {method: 'GET'});
+            let created = await fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/' + props.id, {method: 'GET'});
             console.log(created);
             if(created == null)
                 return true;
@@ -69,7 +70,7 @@ const Room = (props) => {
             console.log('user ' + userID.current + ' joined room\n');
             console.log(props.match.params.id);
             gameID.current = props.match.params.id; // save game id
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
+            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
             .then(data => console.log())
             .catch(error => console.log(error))
@@ -80,7 +81,7 @@ const Room = (props) => {
                 return;
             //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
 
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
+            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.log(error));
@@ -92,7 +93,7 @@ const Room = (props) => {
 
     return(
         <div>
-            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
+            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.hostname + "/join_room/" + props.id}</p> : <p></p>}
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}

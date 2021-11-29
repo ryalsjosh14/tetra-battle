@@ -3,6 +3,7 @@ import { useState, useContext } from "react"
 import { UserContext } from "../UserContext"
 const Signup = (props) => {
 
+    const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
     const {currentUser, setCurrentUser} = useContext(UserContext);
 
     const [userName, setUserName] = useState("")
@@ -34,7 +35,7 @@ const Signup = (props) => {
             body: JSON.stringify(update),
         };
 
-        fetch(window.location.protocol + "//" + window.location.hostname + ':8000/users/create/', options)
+        fetch(window.location.protocol + "//" + window.location.hostname + port + '/users/create/', options)
         .then(response => response.json())
         .then(data => {
             console.log(data);

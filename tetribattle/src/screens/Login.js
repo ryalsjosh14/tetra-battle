@@ -1,10 +1,9 @@
 import { useState, useContext } from "react"
 import { UserContext } from "../UserContext"
-//import axios from 'axios';
 
 const Login = (props) => {
 
-    const lPort = process.env.PORT || 8000;
+    const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
     const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const [userName, setUserName] = useState("");
@@ -36,13 +35,7 @@ const Login = (props) => {
             body: JSON.stringify(update),
         };
         
-        // axios.post(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate', update)
-        //     .then(res => console.log(res.data));
-
-        console.log(process.env.PORT);
-        console.log(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options);
-        //fetch(window.location.protocol + "//" + window.location.hostname + ':' + lPort + '/users/authenticate/', options)
-        fetch(window.location.protocol + "//" + window.location.hostname + '/users/authenticate/', options)
+        fetch(window.location.protocol + "//" + window.location.hostname + port + '/users/authenticate/', options)
         .then(response => response.json())
         .then(data => {
             console.log(data);
