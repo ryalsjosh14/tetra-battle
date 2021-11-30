@@ -62,10 +62,10 @@ const Room = (props) => {
       }
 
 
-    function StartGame()
-      {
-          unityContext.send("StartGame", "LoadGame",);
-      }
+      function StartGame()
+        {
+            unityContext.send("StartGame", "LoadGame",);
+        }
 
     function muteSound()
       {
@@ -197,8 +197,8 @@ const Room = (props) => {
 </div>
 
   <div>
-      <div><div><button onClick={Player1NextTurn}>Player 1 Next Turn<br /></button></div>
-      <button onClick={Player2NextTurn}>Player 2 Next Turn<br /></button>
+      <div><div><button onClick={Player1NextTurn}>Player 1 Next Turn</button></div>
+      <button onClick={Player2NextTurn}>Player 2 Next Turn</button>
 
       <button onClick={StartGame}>Start Game</button>
 
