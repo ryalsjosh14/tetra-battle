@@ -4,6 +4,7 @@ import { useContext, useState, useEffect, useCallback, useRef } from "react";
 //Perry Add
 import React from "react";
 import Unity, { UnityContext} from "react-unity-webgl";
+import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
 
 const unityContext = new UnityContext({
@@ -12,9 +13,6 @@ const unityContext = new UnityContext({
     frameworkUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
     codeUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
-
-
-
 
 
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
@@ -46,7 +44,7 @@ const Room = (props) => {
             sendMessage('-998 ' + gridString); // send grid to other player
           } else
             {
-              if (playerNbr == 1)
+              if (playerNbr === 1)
                 {
                   playerNbr = 2;
                   unityContext.send("Player2Spawner", "nextPlayer", gridString);
@@ -68,7 +66,7 @@ const Room = (props) => {
 
     function Player2NextTurn()
       {
-          if (gameStarted == 0)
+          if (gameStarted === 0)
                 StartGame()
             else
                 unityContext.send("Player2Spawner", "nextPlayer", gridString);
@@ -77,7 +75,7 @@ const Room = (props) => {
 
       function StartGame()
         {
-            if (playerNum.current != 2)
+            if (playerNum.current !== 2)
               {
                   unityContext.send("StartGame", "LoadGame","AAA");
               } else {
@@ -141,28 +139,69 @@ const Room = (props) => {
     }, [otherUserID, socket]); // TODO CHECK THESE DEPENDENCIES
 
 
-
-    //TODO*** encapsulate the whole process in a function to run on browser load/after currentUser is passed with useEffect() [currentUser]
     useEffect(() => {
         if(!currentUser) //only run if currentUser has been updated
             return;
 
-        console.log("id: " + props.id);
+        //console.log("id: " + props.id);
         const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
             let created = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + props.id, {method: 'GET'});
             created = await created.json();
-            console.log("created")
-            console.log(created);
-            if(created == null){
-              return true;
+            //console.log("created")
+            //console.log(created);
+            if(created === null){
+                return true;
             }
             return false
+        }
+
+        const init = async () => {
+            if(props.id === null) { // if second user on webpage
+                //console.log('user ' + userID.current + ' joined room\n');
+                //console.log(props.match.params.id);
+                console.log("in second user if")
+    
+                playerNum.current = 2;
+                gameID.current = props.match.params.id; // save game id
+                fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
+                .then(response => response.json())
+                //.then(data => console.log(data))
+                .catch(error => console.log(error))
+                .then(handshake()); // second player to join initiates handshake
+            }
+            else { //first user on webpage
+              console.log("in first user if")
+
+              let created = await testDuplicate();
+              console.log(created);
+                if(!created){
+                    console.log("returning");
+                    return;
+                }
+                //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
+                playerNum.current = 1;
+    
+                fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
+                .then(response => response.json())
+                .then(data => {
+                  //console.log(data)
+                  //console.log("successfully made request")
+                })
+                .catch(error => console.log(error));
+                gameID.current = props.id;
+            }
         }
 
         userID.current = getIdAsInteger(currentUser.UID); // get from user context
 
         //CONNECT TO WEB SOCKET SERVER
         socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID.current);
+        // test();
+        // const test = asyncwhile(true) {
+        //     await new Promise(r => setTimeout(r, 2000));
+        //     console.log(socket.current.readyState)
+        // }
+        init(); // create game db entry and assign playerNum
 
         socket.current.onmessage = (msg) => { //when receiving a message
             if(parseInt(msg.data) === -999) { // for completing the hanshake
@@ -188,82 +227,64 @@ const Room = (props) => {
         };
 
 
-        console.log(socket.current);
-        if(props.id == null) { // if second user on webpage
-            //console.log('user ' + userID.current + ' joined room\n');
-            //console.log(props.match.params.id);
-            console.log("in second user if")
+        //console.log(socket.current);
 
-            playerNum.current = 2;
-            gameID.current = props.match.params.id; // save game id
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
-            .then(response => response.json())
-            //.then(data => console.log(data))
-            .catch(error => console.log(error))
-            .then(handshake()); // second player to join initiates handshake
-        }
-        else { //first user on webpage
-          console.log("in first user if")
-            if(!testDuplicate()){
-                console.log("returning")
-                return;
-            }
-            //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
-            playerNum.current = 1;
-
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
-            .then(response => response.json())
-            .then(data => {
-              console.log(data)
-              console.log("successfully made request")
-            })
-            .catch(error => console.log(error));
-            gameID.current = props.id;
-        }
-    }, [currentUser]); // run only once on load
+    }, [currentUser]); // run when currentUser is updated
 
     let startGameButton;
-    if (playerNum != 2 && gameStarted == 0){
+    if (playerNum !== 2 && gameStarted === 0){
       startGameButton = (<button onClick={StartGame}>Start Game</button>)
     }
 
     return(
     <div>
         <div>
-            {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
+            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
-            {/* <button onClick={ping}>Test web socket...</button> */}
-            {/* <button onClick={test}>Test creation of game in db...</button> */}
-
-            <input type="text" onKeyPress={(e) => {
+            {/*<input type="text" onKeyPress={(e) => {
                 if(e.key === 'Enter') {
                     sendMessage(e.target.value); // whatever was typed in gets sent on enter press
                     e.target.value = "";
                 }
             }}></input>*/}
 
-            {props.id ? <p>Player 1</p>:<p>Player 2</p>}
-
-            <Unity unityContext={unityContext}
-                style={{
-                    height: "720px",
-                    width: "600px",
-                    border: "2px solid black",
-                    background: "grey",
-                }}
-            />
-
+            {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
+            {props.id ? 
+            <div>
+                <p>Player 1</p>
+                <Unity unityContext={unityContext}
+                    style={{
+                        height: "720px",
+                        width: "600px",
+                        border: "2px solid black",
+                        background: "grey",
+                    }}
+                />
+            </div>
+            :
+            <div>
+                <p>Player 2</p>
+                <Unity unityContext={unityContext}
+                    style={{
+                        height: "720px",
+                        width: "600px",
+                        border: "2px solid black",
+                        background: "grey",
+                    }}
+                />
+            </div>
+            }
         </div>
 
-      {startGameButton}
-      <div><button onClick={muteSound}>Mute/Unmute</button>
-      <button onClick={decreaseVolume}>Volume -</button>
-      <button onClick={increaseVolume}>Volume +</button>
+    {startGameButton}
+    <div><button onClick={muteSound}>Mute/Unmute</button>
+    <button onClick={decreaseVolume}>Volume -</button>
+    <button onClick={increaseVolume}>Volume +</button>
 
-      </div>
+    </div>
 
 
-</div>
+    </div>
 
     )
 }
