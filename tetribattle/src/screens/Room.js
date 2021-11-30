@@ -39,7 +39,7 @@ const Room = (props) => {
     useState(function () {
       unityContext.on("NextPlayer", function (gridString) {
         setGridString(gridString);
-        
+
         if (otherUserID.current != null)
           {
             console.log("send message");
@@ -78,11 +78,14 @@ const Room = (props) => {
 
       function StartGame()
         {
-
-            if (playerNum.current === 1)
+          console.log("start");
+          console.log(playerNum.current);
+            if (playerNum.current != 2)
               {
+                console.log("start1");
                   unityContext.send("StartGame", "LoadGame","AAA");
               } else {
+                console.log("start2");
                   unityContext.send("StartGame", "LoadGame",gridString);
               }
 
@@ -225,18 +228,14 @@ const Room = (props) => {
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}
-<<<<<<< HEAD
 
             <input type="text" onKeyPress={(e) => {
-=======
-            {/*<input type="text" onKeyPress={(e) => {
->>>>>>> 470a79812e5f05f8800f01ae4f5afafa5a45ddce
                 if(e.key === 'Enter') {
                     sendMessage(e.target.value); // whatever was typed in gets sent on enter press
                     e.target.value = "";
                 }
             }}></input>*/}
-            
+
             {props.id ? <p>Player 1</p>:<p>Player 2</p>}
 
             <Unity unityContext={unityContext}
@@ -250,7 +249,6 @@ const Room = (props) => {
 
         </div>
 
-<<<<<<< HEAD
       {startGameButton}
       <div><button onClick={muteSound}>Mute/Unmute</button>
       <button onClick={decreaseVolume}>Volume -</button>
@@ -261,20 +259,6 @@ const Room = (props) => {
 
 </div>
 
-=======
-        <div>
-            <button onClick={Player1NextTurn}>Player 1 Next Turn<br /></button>
-            <button onClick={Player2NextTurn}>Player 2 Next Turn<br /></button>
-
-            <button onClick={StartGame}>Start Game</button>
-
-            <button onClick={muteSound}>Mute/Unmute</button>
-            <button onClick={decreaseVolume}>Volume -</button>
-            <button onClick={increaseVolume}>Volume +</button>
-
-        </div>
-    </div>
->>>>>>> 470a79812e5f05f8800f01ae4f5afafa5a45ddce
     )
 }
 
