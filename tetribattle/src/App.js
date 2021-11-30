@@ -11,9 +11,9 @@ import './App.css';
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')));
   //console.log(currentUser.username)
-  // console.log(localStorage.getItem("user"))
+  //console.log(localStorage.getItem("user"))
 
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <UserContext.Provider value={value}>
-        <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
+        <AppBar user={currentUser}/>
 
         <Switch>
           <Route exact path="/">
@@ -54,13 +54,11 @@ function App() {
           }}/>
 
           <Route path="/room" render={(props) => {
-            /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
-            return <Room {...props} id={genId()}/>
+            return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />;
           }}/>
 
-          <Route path="/join_room/:id" render={(props) => { /* CANT GET THIS TO TRIGGER BADBADBAD */
-            /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
-            return <Room {...props} id={null}/> // can pass within url and fetch id from within room
+          <Route path="/join_room/:id" render={(props) => {
+            return currentUser ? <Room {...props} id={null}/> : <Redirect to="/login" />;
           }}/>
 
           <Route path="/login" render={(props) => {
@@ -72,7 +70,7 @@ function App() {
           }}/>
 
           <Route path="/settings" render={(props) => {
-            return <Settings {...props}/>
+            return currentUser ? <Settings {...props} /> : <Redirect to="/login" />;
           }}/>
 
           <Route path='*' component={Home} /> {/*if page not found*/}

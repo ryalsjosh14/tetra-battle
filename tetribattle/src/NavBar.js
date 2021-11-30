@@ -12,10 +12,18 @@ const NavBar = (props) => {
 
   let loginButton;
   if (currentUser){
-    loginButton = (<h1>{currentUser.username}</h1>)
+    loginButton = null;
   }
   else{
-    loginButton = (<Button color="inherit" href="/login" style={{display: 'flex', justifyContent:'flex-end'}}>Login</Button>)
+    loginButton = (<Button color="inherit" href="/login" style={{display: 'flex', justifyContent:'flex-end'}}>Login</Button>);
+  }
+
+  let username;
+  if (currentUser) {
+    username = currentUser.username;
+  }
+  else {
+    username = null;
   }
 
   const LogOut = (props) => { //TODO redirect back to home page after logout
@@ -28,22 +36,36 @@ const NavBar = (props) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static"> {/* gives default color */}
         <Toolbar>
-          <IconButton  size="medium" edge="end" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            {/* <UserIcon /> */}
-          </IconButton>
+          {/* <IconButton  size="medium" edge="end" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          <UserIcon />
+          </IconButton> */}
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             Anti-Matter Tetris
           </Typography>
-          <Button color="inherit" href="/home" style={{display: 'flex', justifyContent:'flex-end'}}>Home</Button>
 
-          { currentUser
+          <div style={{position:'relative', left: '2em'}}>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+              {username}
+            </Typography>
+          </div>
+
+          <div style={{display: 'flex', justifyContent:'flex-end', position:'absolute', right: '2em'}}>
+            <Button color="inherit" href="/home" style={{display: 'flex', justifyContent:'flex-end'}}>Home</Button>
+
+            { currentUser
               ? <Button color="inherit" href="/room" style={{display: 'flex', justifyContent:'flex-end'}}>Play</Button>
-              : <Button title="Please login to play" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Play</Button>
-          }
+              : <Button title="Please login to play" href="/room" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Play</Button>
+            }
 
-          <Button color="inherit" href="/settings" style={{display: 'flex', justifyContent:'flex-end'}}>Settings</Button>
-          {loginButton}
-          { currentUser ? <Button color="inherit" style={{display: 'flex', justifyContent:'flex-end'}} onClick={LogOut}> Logout </Button> : <p></p>}
+            { currentUser
+              ? <Button color="inherit" href="/settings" style={{display: 'flex', justifyContent:'flex-end'}}>Settings</Button>
+              : <Button title="Please login to change settings" href="/settings" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Settings</Button>
+            }
+
+            {loginButton}
+
+            { currentUser ? <Button color="inherit" style={{display: 'flex', justifyContent:'flex-end'}} onClick={LogOut}> Logout </Button> : <p></p>}
+          </div>
         </Toolbar>
       </AppBar>
     </Box>
