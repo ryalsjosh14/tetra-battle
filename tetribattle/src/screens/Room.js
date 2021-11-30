@@ -7,10 +7,10 @@ import Unity, { UnityContext} from "react-unity-webgl";
 //End Perry Add
 
 const unityContext = new UnityContext({
-loaderUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-dataUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-frameworkUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-codeUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    loaderUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
 
 
@@ -150,7 +150,8 @@ const Room = (props) => {
 
         // console.log("id: " + props.id);
         const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
-            let created = await fetch(window.location.protocol + "//" + window.location.host + '/game/' + props.id, {method: 'GET'});
+            let created = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + props.id, {method: 'GET'});
+            created = await created.json();
             console.log(created);
             if(created == null)
                 return true;
@@ -194,19 +195,19 @@ const Room = (props) => {
             gameID.current = props.match.params.id; // save game id
             fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
-            .then(data => console.log())
+            //.then(data => console.log(data))
             .catch(error => console.log(error))
             .then(handshake()); // second player to join initiates handshake
         }
         else { //first user on webpage
-            if(!testDuplicate)
+            if(testDuplicate() !== null)
                 return;
             //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
             playerNum.current = 1;
 
             fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
-            .then(data => console.log(data))
+            //.then(data => console.log(data))
             .catch(error => console.log(error));
             gameID.current = props.id;
         }
@@ -218,31 +219,38 @@ const Room = (props) => {
     }
 
     return(
-      <div>
+    <div>
         <div>
             {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
             {/* <button onClick={ping}>Test web socket...</button> */}
             {/* <button onClick={test}>Test creation of game in db...</button> */}
+<<<<<<< HEAD
 
             <input type="text" onKeyPress={(e) => {
+=======
+            {/*<input type="text" onKeyPress={(e) => {
+>>>>>>> 470a79812e5f05f8800f01ae4f5afafa5a45ddce
                 if(e.key === 'Enter') {
                     sendMessage(e.target.value); // whatever was typed in gets sent on enter press
                     e.target.value = "";
                 }
-            }}></input>
+            }}></input>*/}
+            
+            {props.id ? <p>Player 1</p>:<p>Player 2</p>}
 
-          <Unity unityContext={unityContext}
-              style={{
-                  height: "720px",
-                  width: "600px",
-                  border: "2px solid black",
-                  background: "grey",
-                  }}
-          />
+            <Unity unityContext={unityContext}
+                style={{
+                    height: "720px",
+                    width: "600px",
+                    border: "2px solid black",
+                    background: "grey",
+                }}
+            />
 
-</div>
+        </div>
 
+<<<<<<< HEAD
       {startGameButton}
       <div><button onClick={muteSound}>Mute/Unmute</button>
       <button onClick={decreaseVolume}>Volume -</button>
@@ -253,6 +261,20 @@ const Room = (props) => {
 
 </div>
 
+=======
+        <div>
+            <button onClick={Player1NextTurn}>Player 1 Next Turn<br /></button>
+            <button onClick={Player2NextTurn}>Player 2 Next Turn<br /></button>
+
+            <button onClick={StartGame}>Start Game</button>
+
+            <button onClick={muteSound}>Mute/Unmute</button>
+            <button onClick={decreaseVolume}>Volume -</button>
+            <button onClick={increaseVolume}>Volume +</button>
+
+        </div>
+    </div>
+>>>>>>> 470a79812e5f05f8800f01ae4f5afafa5a45ddce
     )
 }
 
