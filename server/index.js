@@ -67,7 +67,7 @@ app.listen(listenPort, () => console.log('Listening on: http://localhost:' + lis
 
 const ws = require('ws');
 
-var wsServer = new ws.Server({ server: app }); // initialize server
+var wsServer = new ws.Server({ port:5000 }); // initialize server
 var wsConnections = []; // store all active connections
 //const wsConnections = new Map();
 
