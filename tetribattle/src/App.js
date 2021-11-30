@@ -69,7 +69,7 @@ function App() {
             return <Signup {...props}/>
           }}/>
 
-          <Route path="/settings" render={(props) => {
+          <Route path="/settingsPage" render={(props) => {
             return currentUser ? <Settings {...props} /> : <Redirect to="/login" />;
           }}/>
 
