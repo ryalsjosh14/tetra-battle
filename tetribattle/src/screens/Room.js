@@ -50,19 +50,37 @@ const Room = (props) => {
         });
       }, []);
 
-    function Player2NextTurn()
-        {
-        console.log("Player 2 clicked");
-        unityContext.send("Player2Spawner", "nextPlayer", gridString);
-        }
-
     function Player1NextTurn()
-        {
-        console.log("Player 1 clicked");
-        unityContext.send("Player1Spawner", "nextPlayer", gridString);
-        }
+      {
+          unityContext.send("Player1Spawner", "nextPlayer", gridString);
+      }
 
 
+    function Player2NextTurn()
+      {
+          unityContext.send("Player2Spawner", "nextPlayer", gridString);
+      }
+
+
+    function StartGame()
+      {
+          unityContext.send("StartGame", "LoadGame",);
+      }
+
+    function muteSound()
+      {
+          unityContext.send("VolumeControl", "muteSound",);
+      }
+
+    function decreaseVolume()
+      {
+          unityContext.send("VolumeControl", "decreaseVolume",);
+      }
+
+    function increaseVolume()
+      {
+          unityContext.send("VolumeControl", "increaseVolume",);
+      }
 
   //End Perry Add
 
@@ -177,6 +195,16 @@ const Room = (props) => {
 
       <button onClick={Player1NextTurn}>Player 1 Next Turn</button>
       <button onClick={Player2NextTurn}>Player 2 Next Turn</button>
+
+      //Start Game
+      <button onClick={StartGame}>Start Game</button>
+
+      //Volume Control
+      <button onClick={muteSound}>Mute/Unmute</button>
+      <button onClick={decreaseVolume}>Volume - </button>
+      <button onClick={increaseVolume}>Volume + </button>
+
+
 
         </div>
     )

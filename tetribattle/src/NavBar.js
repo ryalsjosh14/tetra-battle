@@ -22,7 +22,7 @@ const NavBar = (props) => {
     setCurrentUser(null);
     //props.history.push('/home');
   };
-  
+
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -35,7 +35,12 @@ const NavBar = (props) => {
             Anti-Matter Tetris
           </Typography>
           <Button color="inherit" href="/home" style={{display: 'flex', justifyContent:'flex-end'}}>Home</Button>
-          <Button color="inherit" href="/room" style={{display: 'flex', justifyContent:'flex-end'}}>Play</Button>
+
+          { currentUser
+              ? <Button color="inherit" href="/room" style={{display: 'flex', justifyContent:'flex-end'}}>Play</Button>
+              : <Button title="Please login to play" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Play</Button>
+          }
+
           <Button color="inherit" href="/settings" style={{display: 'flex', justifyContent:'flex-end'}}>Settings</Button>
           {loginButton}
           { currentUser ? <Button color="inherit" style={{display: 'flex', justifyContent:'flex-end'}} onClick={LogOut}> Logout </Button> : <p></p>}
