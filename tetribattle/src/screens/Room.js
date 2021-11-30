@@ -172,6 +172,7 @@ const Room = (props) => {
 
 
     return(
+      <div>
         <div>
             {props.id ? <p>hiya. URL is: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
@@ -193,20 +194,23 @@ const Room = (props) => {
                   }}
           />
 
-      <button onClick={Player1NextTurn}>Player 1 Next Turn</button>
-      <button onClick={Player2NextTurn}>Player 2 Next Turn</button>
+</div>
 
-      //Start Game
+  <div>
+      <div><div><button onClick={Player1NextTurn}>Player 1 Next Turn<br /></button></div>
+      <button onClick={Player2NextTurn}>Player 2 Next Turn<br /></button>
+
       <button onClick={StartGame}>Start Game</button>
 
-      //Volume Control
       <button onClick={muteSound}>Mute/Unmute</button>
-      <button onClick={decreaseVolume}>Volume - </button>
-      <button onClick={increaseVolume}>Volume + </button>
+      <button onClick={decreaseVolume}>Volume -</button>
+      <button onClick={increaseVolume}>Volume +</button>
 
+    </div>
+    </div>
 
+  </div>
 
-        </div>
     )
 }
 
