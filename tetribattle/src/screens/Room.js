@@ -127,6 +127,7 @@ const Room = (props) => {
     }
 
     const handshake = async () => { // handshake with other web socket
+        console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current)
         let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
 
@@ -146,13 +147,16 @@ const Room = (props) => {
         if(!currentUser) //only run if currentUser has been updated
             return;
 
-        // console.log("id: " + props.id);
+        console.log("id: " + props.id);
         const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
             let created = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + props.id, {method: 'GET'});
             created = await created.json();
+            console.log("created")
             console.log(created);
-            if(created == null)
-                return true;
+            if(created == null){
+              return true;
+            }
+            return false
         }
 
         userID.current = getIdAsInteger(currentUser.UID); // get from user context
@@ -185,9 +189,10 @@ const Room = (props) => {
 
 
         console.log(socket.current);
-        if(props.id === null) { // if second user on webpage
+        if(props.id == null) { // if second user on webpage
             //console.log('user ' + userID.current + ' joined room\n');
             //console.log(props.match.params.id);
+            console.log("in second user if")
 
             playerNum.current = 2;
             gameID.current = props.match.params.id; // save game id
@@ -198,14 +203,20 @@ const Room = (props) => {
             .then(handshake()); // second player to join initiates handshake
         }
         else { //first user on webpage
-            if(testDuplicate() !== null)
+          console.log("in first user if")
+            if(!testDuplicate()){
+                console.log("returning")
                 return;
+            }
             //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
             playerNum.current = 1;
 
             fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
-            //.then(data => console.log(data))
+            .then(data => {
+              console.log(data)
+              console.log("successfully made request")
+            })
             .catch(error => console.log(error));
             gameID.current = props.id;
         }
