@@ -46,7 +46,6 @@ const Room = (props) => {
             sendMessage('-998 ' + gridString); // send grid to other player
           } else
             {
-              console.log("Next Player");
               if (playerNbr == 1)
                 {
                   playerNbr = 2;
@@ -78,14 +77,10 @@ const Room = (props) => {
 
       function StartGame()
         {
-          console.log("start");
-          console.log(playerNum.current);
             if (playerNum.current != 2)
               {
-                console.log("start1");
                   unityContext.send("StartGame", "LoadGame","AAA");
               } else {
-                console.log("start2");
                   unityContext.send("StartGame", "LoadGame",gridString);
               }
 
