@@ -25,7 +25,7 @@ const Room = (props) => {
     const [gridString, setGridString] = useState("");
     const [didError, setDidError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    var playerNbr = 1;
+    //var playerNbr = 1;
 
 
     useState(function () {
@@ -37,6 +37,7 @@ const Room = (props) => {
     useState(function () {
       unityContext.on("NextPlayer", function (gridString) {
         setGridString(gridString);
+        sendMessage('-998 ' + gridString); // send grid to other player
         /*if (playerNbr === 1)
         {
           playerNbr = 2;
@@ -93,6 +94,7 @@ const Room = (props) => {
     const gameID = useRef(null);
     const otherUserID = useRef(null);
     const socket = useRef(null);
+    const playerNum = useRef(null);
 
 
     const getIdAsInteger = (id) => { // for storing UID in database
@@ -141,15 +143,28 @@ const Room = (props) => {
             if(parseInt(msg.data) === -999) { // for completing the hanshake
                 otherUserID.current = parseInt(msg.data.substr(5));
             }
+
+            if(parseInt(msg.data) === -998) { // for receiving grid
+                console.log("gridstring: " + msg.data.substr(5));
+                setGridString(msg.data.substr(5)); // set the grid string based on what is received
+
+                if(playerNum.current === 1) // send to respective player
+                    unityContext.send("Player2Spawner", "nextPlayer", gridString);
+                else if(playerNum.current === 2)
+                    unityContext.send("Player1Spawner", "nextPlayer", gridString);
+            }
+
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
-            alert("received: " + msg.data + " from userID: " + otherUserID.current);
+            //alert("received: " + msg.data + " from userID: " + otherUserID.current);
         };
 
 
         console.log(socket.current);
         if(props.id === null) { // if second user on webpage
-            console.log('user ' + userID.current + ' joined room\n');
-            console.log(props.match.params.id);
+            //console.log('user ' + userID.current + ' joined room\n');
+            //console.log(props.match.params.id);
+            
+            playerNum.current = 2;
             gameID.current = props.match.params.id; // save game id
             fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
@@ -161,7 +176,8 @@ const Room = (props) => {
             if(!testDuplicate)
                 return;
             //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
-
+            playerNum.current = 1;
+            
             fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
             .then(data => console.log(data))
