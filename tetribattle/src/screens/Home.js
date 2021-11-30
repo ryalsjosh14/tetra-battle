@@ -8,7 +8,7 @@ export default function Home(){
             <Grid item container>
                 <Grid item xs={false} sm={2}/>
                 <Grid item xs={12} sm={8}>
-                    <h1>Tetrabattle</h1>
+                    <h1>Anti-Matter Tetris</h1>
                     <p>(Iinsert GIF of gameplay here)</p>
                 </Grid>
                 <Grid item xs={false} sm={2}/>
