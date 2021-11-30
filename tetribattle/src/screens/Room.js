@@ -63,10 +63,10 @@ const Room = (props) => {
       }
 
 
-    function StartGame()
-      {
-          unityContext.send("StartGame", "LoadGame",);
-      }
+      function StartGame()
+        {
+            unityContext.send("StartGame", "LoadGame",);
+        }
 
     function muteSound()
       {
