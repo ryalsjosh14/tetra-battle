@@ -307,7 +307,7 @@ const Room = (props) => {
             }
         </div>
 
-    {startGameButton}
+    {props.id ? startGameButton : null}
     <div><button onClick={muteSound}>Mute/Unmute</button>
     <button onClick={decreaseVolume}>Volume -</button>
     <button onClick={increaseVolume}>Volume +</button>
