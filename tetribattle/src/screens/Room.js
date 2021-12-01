@@ -233,6 +233,10 @@ const Room = (props) => {
         console.log("just connected to socket server")
         console.log(socket.current)
 
+        socket.current.onopen = () => {
+          console.log("opening socket")
+        }
+
         init(); // create game db entry and assign playerNum
 
         socket.current.onmessage = (msg) => { //when receiving a message
