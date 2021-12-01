@@ -164,6 +164,11 @@ const Room = (props) => {
         
         otherUserID.current = data.user1; // store partners ID for websocket communications
         console.log("about to send message in handshake with userID = " + userID.current)
+        console.log("wait for socket to open")
+        while(socket.current.readyState !== 1){
+          //sit here
+        }
+        console.log("socket open")
         sendMessage("-999 " + userID.current); // send ID to partner
     }
 
