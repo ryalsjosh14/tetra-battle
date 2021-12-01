@@ -70,11 +70,14 @@ app.use('/game', gameRouter);
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, '../tetribattle/build')));
+  //app.use(express.static(path.join(__dirname, '../tetribattle/public')));
 
   app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
   });
 }
+
+
 const tempServer = http.createServer(app);
 
 

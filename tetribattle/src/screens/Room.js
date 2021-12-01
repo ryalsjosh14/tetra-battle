@@ -4,18 +4,18 @@ import { useContext, useState, useEffect, useCallback, useRef } from "react";
 //Perry Add
 import React from "react";
 import Unity, { UnityContext} from "react-unity-webgl";
-import SelectInput from "@material-ui/core/Select/SelectInput";
+//import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
 
 const unityContext = new UnityContext({
-    //loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-    //dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-    //frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-    //codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
-    loaderUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-    dataUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-    frameworkUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-    codeUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    // loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    // dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    // frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    // codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    loaderUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: process.env.PUBLIC_URL + "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: process.env.PUBLIC_URL + "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: process.env.PUBLIC_URL + "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
 
 
@@ -27,8 +27,8 @@ const Room = (props) => {
     const [isGameOver, setIsGameOver] = useState(false);
     const [gridStringx, setGridStringx] = useState("");
     var _GridString;
-    const [didError, setDidError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    //const [didError, setDidError] = useState(false);
+    //const [errorMessage, setErrorMessage] = useState("");
     var playerNbr = 1;
     var gameStarted = 0;
 
@@ -113,7 +113,7 @@ const Room = (props) => {
     const { currentUser } = useContext(UserContext);
 
     const port = window.location.protocol === 'https:' ? '' : ':8000'; // heroku or local
-    const wsPort = window.location.protocol === 'https:' ? '' : ':3000';
+    //const wsPort = window.location.protocol === 'https:' ? '' : ':3000';
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
     const [gameIDReal, setGameID] = useState("")
