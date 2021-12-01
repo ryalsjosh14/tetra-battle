@@ -289,7 +289,7 @@ const Room = (props) => {
     return(
     <div>
         <div>
-            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
+            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
 
             <div id="chat-system" style={{'position': 'absolute', 'left': '2em'}}>
                 <div id="chat-box" style={chatStyle}></div>               
