@@ -170,15 +170,6 @@ const Room = (props) => {
         console.log("about to send message in handshake to userID = " + otherUserID.current)
         console.log("wait for socket to open")
         console.log(socket.current.readyState)
-<<<<<<< HEAD
-        setTimeout( () => {
-            sendMessage("-999 " + userID.current); // send ID to partner
-        }, 1000)
-=======
-        //while(socket.current.readyState !== 1){
-          //sit here
-        //}
->>>>>>> febde8e007866664cd47afffdcfdf912999a0e82
         console.log("socket open")
     }
 
