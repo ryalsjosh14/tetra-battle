@@ -8,7 +8,7 @@
   "scripts": {
     "frontend-build": "cd tetribattle && npm i",
     "backend-build": "cd server && npm i",
-    "frontend-run": "cd tetribattle && npm build",
+    "frontend-run": "cd tetribattle && npm start",
     "backend-run": "cd server && npm start",
     "heroku-postbuild": "npm run frontend-build & npm run backend-build",
     "start": "npm run frontend-run & npm run backend-run"
