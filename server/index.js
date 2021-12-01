@@ -31,6 +31,38 @@ const gameRouter = require('./routes/gameRouter');
 
 const port = 8000;
 const app = express();
+
+/* WEB SOCKET SERVER */
+
+const ws = require('ws');
+
+const tempServer = require('http').createServer(app)
+
+var wsServer = new ws.Server({ server: tempServer }); // initialize server
+var wsConnections = []; // store all active connections
+//const wsConnections = new Map();
+
+//TODO****************************************************************
+// MAKE DB ENTRY FOR EACH GAME
+// (slow) ON MESSAGE, LOOK THEM UP FROM DB AND SEND TO THEM USING {wsConnections[id_from_db]}
+// IDEALLY, FIND SOME WAY TO CACHE THIS, OR EVEN BETTER JUST PASS THE OTHER USERS ID IN THE URL
+// HOWEVER, THAT REQUIRES REACT ROOM.js TO KNOW THE ID OF THE OTHER PLAYER, 
+// WHICH CAN ONLY BE DONE IF blah blah idc anymore just do the slow way for now and implement a handshake later kasdlkjasdlkjasdlkj
+//TODO****************************************************************
+
+wsServer.on('connection', (webSocket, req) => { // when a player connects
+    console.log("player connected")
+    const id = parseInt(req.url.substr(1)); // get their id (from url)
+    wsConnections[id] = webSocket; // store as an active connection
+
+    console.log("user " + id + " connected\n");
+
+    webSocket.on('message', (msg) => { // when a message is received
+      console.log("received: " + msg);
+      wsConnections[parseInt(msg)].send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
+  });
+});
+
 app.use(cors(corsOptions));
 app.use(morgan('dev')); //wrapping express
 app.use(bodyParser.json());
@@ -61,50 +93,8 @@ if (process.env.NODE_ENV === 'production') {
 //Listen
 const listenPort = process.env.PORT || port;
 console.log(process.env.PORT + ", " + port);
-app.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
+tempServer.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
 
 
 
-/* WEB SOCKET SERVER */
-
-const ws = require('ws');
-
-var wsServer = new ws.Server({port: 5000}); // initialize server
-var wsConnections = []; // store all active connections
-//const wsConnections = new Map();
-
-//TODO****************************************************************
-// MAKE DB ENTRY FOR EACH GAME
-// (slow) ON MESSAGE, LOOK THEM UP FROM DB AND SEND TO THEM USING {wsConnections[id_from_db]}
-// IDEALLY, FIND SOME WAY TO CACHE THIS, OR EVEN BETTER JUST PASS THE OTHER USERS ID IN THE URL
-// HOWEVER, THAT REQUIRES REACT ROOM.js TO KNOW THE ID OF THE OTHER PLAYER, 
-// WHICH CAN ONLY BE DONE IF blah blah idc anymore just do the slow way for now and implement a handshake later kasdlkjasdlkjasdlkj
-//TODO****************************************************************
-
-wsServer.on('connection', (webSocket, req) => { // when a player connects
-    const id = parseInt(req.url.substr(1)); // get their id (from url)
-    wsConnections[id] = webSocket; // store as an active connection
-
-    console.log("user " + id + " connected\n");
-
-    webSocket.on('message', (msg) => { // when a message is received
-      console.log("received: " + msg);
-      wsConnections[parseInt(msg)].send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
-  });
-});
-
-//new id system below
-
-// wsServer.on('connection', (webSocket, req) => { // when a player connects
-//   console.log(req.url)
-//     const id = req.url.substr(0,req.url.indexOf(' ')); // get their id (from url)
-//     wsConnections.set(id, webSocket); // store as an active connection
-
-//     console.log("user " + id + " connected\n");
-
-//     webSocket.on('message', (msg) => { // when a message is received
-//       console.log("received: " + msg);
-//       wsConnections.get(substr(0,msg.indexOf(' '))).send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
-//   });
-// });
 
