@@ -224,12 +224,12 @@ const Room = (props) => {
         }
 
         userID.current = getIdAsInteger(currentUser.UID); // get from user context
-        console.log(userID.current)
+        //console.log(userID.current)
 
         //CONNECT TO WEB SOCKET SERVER
         socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':8000/' + userID.current);
 
-        console.log("just connected to socket server")
+        //console.log("just connected to socket server")
 
         init(); // create game db entry and assign playerNum
 
@@ -263,31 +263,6 @@ const Room = (props) => {
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
             //alert("received: " + msg.data + " from userID: " + otherUserID.current);
         };
-
-
-        console.log(socket.current);
-        if(props.id === null) { // if second user on webpage
-          
-            console.log('user ' + userID.current + ' joined room\n');
-            console.log(props.match.params.id);
-            gameID.current = props.match.params.id; // save game id
-            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
-            .then(response => response.json())
-            .then(data => console.log("DATA: " + data))
-            .catch(error => console.log(error))
-            .then(handshake()); // second player to join initiates handshake       
-        }
-        else { //first user on webpage
-            if(!testDuplicate)
-                return;
-            //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
-
-            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.log(error));
-            gameID.current = props.id;
-        }
     }, [currentUser]); // run only once on load
 
     let startGameButton;
