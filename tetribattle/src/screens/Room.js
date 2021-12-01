@@ -237,7 +237,7 @@ const Room = (props) => {
             gameID.current = props.match.params.id; // save game id
             fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
-            .then(data => console.log())
+            .then(data => console.log("DATA: " + data))
             .catch(error => console.log(error))
             .then(handshake()); // second player to join initiates handshake       
         }
