@@ -1,4 +1,4 @@
-import { UserContext } from "../UserContext";
+  import { UserContext } from "../UserContext";
 import { useContext, useState, useEffect, useCallback, useRef } from "react";
 
 //Perry Add
@@ -21,7 +21,8 @@ const Room = (props) => {
 
   //Perry Add
     const [isGameOver, setIsGameOver] = useState(false);
-    const [gridString, setGridString] = useState("");
+    const [gridStringx, setGridStringx] = useState("");
+    var _GridString;
     const [didError, setDidError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     var playerNbr = 1;
@@ -36,23 +37,24 @@ const Room = (props) => {
 
     useState(function () {
       unityContext.on("NextPlayer", function (gridString) {
-        setGridString(gridString);
+        setGridStringx(gridString);
+        _GridString = gridString;
 
         if (otherUserID.current != null)
           {
             console.log("send message");
-            sendMessage('-998 ' + gridString); // send grid to other player
+            sendMessage('-998 ' + _GridString); // send grid to other player
           } else
             {
               if (playerNbr === 1)
                 {
                   playerNbr = 2;
-                  unityContext.send("Player2Spawner", "nextPlayer", gridString);
+                  unityContext.send("Player2Spawner", "nextPlayer", _GridString);
                 }
                   else
                     {
                       playerNbr = 1;
-                      unityContext.send("Player1Spawner", "nextPlayer", gridString);
+                      unityContext.send("Player1Spawner", "nextPlayer", _GridString);
                     }
               }
         });
@@ -60,7 +62,7 @@ const Room = (props) => {
 
     function Player1NextTurn()
       {
-          unityContext.send("Player1Spawner", "nextPlayer", gridString);
+          unityContext.send("Player1Spawner", "nextPlayer", _GridString);
       }
 
 
@@ -69,7 +71,7 @@ const Room = (props) => {
           if (gameStarted === 0)
                 StartGame()
             else
-                unityContext.send("Player2Spawner", "nextPlayer", gridString);
+                unityContext.send("Player2Spawner", "nextPlayer", _GridString);
       }
 
 
@@ -79,7 +81,7 @@ const Room = (props) => {
               {
                   unityContext.send("StartGame", "LoadGame","AAA");
               } else {
-                  unityContext.send("StartGame", "LoadGame",gridString);
+                  unityContext.send("StartGame", "LoadGame",_GridString);
               }
 
               gameStarted = 1;
@@ -164,7 +166,7 @@ const Room = (props) => {
         let data = await fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
         console.log(data)
-        
+
         otherUserID.current = data.user1; // store partners ID for websocket communications
         console.log("about to send message in handshake with userID = " + userID.current)
         console.log("about to send message in handshake to userID = " + otherUserID.current)
@@ -201,7 +203,7 @@ const Room = (props) => {
                 //console.log('user ' + userID.current + ' joined room\n');
                 //console.log(props.match.params.id);
                 console.log("in second user if")
-    
+
                 playerNum.current = 2;
                 gameID.current = props.match.params.id; // save game id
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
@@ -221,7 +223,7 @@ const Room = (props) => {
                 }
                 //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
                 playerNum.current = 1;
-    
+
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
                 .then(response => response.json())
                 .then(data => {
@@ -259,7 +261,14 @@ const Room = (props) => {
 
             if(parseInt(msg.data) === -998) { // for receiving grid
                 console.log("gridstring: " + msg.data.substr(5));
-                setGridString(msg.data.substr(5)); // set the grid string based on what is received
+                console.log("grid before parse");
+                console.log(_GridString);
+                console.log("str before parse");
+                console.log(msg.data.substr(5));
+                setGridStringx(msg.data.substr(5));
+                _GridString= msg.data.substr(5); // set the grid string based on what is received
+                console.log("grid after parse");
+                console.log(_GridString);
 
                 if(playerNum.current === 1) // send to respective player
                   {
@@ -267,6 +276,9 @@ const Room = (props) => {
                   }
                 else if(playerNum.current === 2)
                   {
+                    console.log("player2 next turn grid");
+                    console.log(_GridString);
+
                     Player2NextTurn();
                   }
             }
@@ -292,11 +304,11 @@ const Room = (props) => {
             {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
 
             <div id="chat-system" style={{'position': 'absolute', 'left': '2em'}}>
-                <div id="chat-box" style={chatStyle}></div>               
+                <div id="chat-box" style={chatStyle}></div>
                 <input id='chat-input' type="text" onKeyDown={e => chatKeydown(e)}></input>
             </div>
             {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
-            {props.id ? 
+            {props.id ?
             <div>
                 <p>Player 1</p>
                 <Unity unityContext={unityContext}
