@@ -254,8 +254,6 @@ const Room = (props) => {
         }
     }, [currentUser]); // run only once on load
 
-    }, [currentUser]); // run when currentUser is updated
-
     let startGameButton;
     if (playerNum !== 2 && gameStarted === 0){
       startGameButton = (<button onClick={StartGame}>Start Game</button>)
