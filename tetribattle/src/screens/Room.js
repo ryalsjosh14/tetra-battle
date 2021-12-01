@@ -227,7 +227,7 @@ const Room = (props) => {
         //console.log(userID.current)
 
         //CONNECT TO WEB SOCKET SERVER
-        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':8000/' + userID.current);
+        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + port + '/' + userID.current);
 
         //console.log("just connected to socket server")
 
