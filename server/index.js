@@ -16,6 +16,7 @@ try {
   uri = require("./config/config.js").uri;
 } catch {
   uri = process.env.uri;
+  console.log("uri: " + uri)
 }
 
 const corsOptions ={
