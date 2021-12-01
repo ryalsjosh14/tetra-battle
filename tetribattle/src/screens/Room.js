@@ -7,12 +7,12 @@ import Unity, { UnityContext} from "react-unity-webgl";
 import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
 
-// const unityContext = new UnityContext({
-//     loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-//     dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-//     frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-//     codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
-// });
+const unityContext = new UnityContext({
+    loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+});
 
 
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
@@ -24,82 +24,82 @@ const Room = (props) => {
     const [gridString, setGridString] = useState("");
     const [didError, setDidError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    // var playerNbr = 1;
-    // var gameStarted = 0;
+    var playerNbr = 1;
+    var gameStarted = 0;
 
 
-    // useState(function () {
-    //   unityContext.on("GameOver", function () {
-    //     setIsGameOver(true);
-    //     });
-    //   }, []);
+    useState(function () {
+      unityContext.on("GameOver", function () {
+        setIsGameOver(true);
+        });
+      }, []);
 
-    // useState(function () {
-    //   unityContext.on("NextPlayer", function (gridString) {
-    //     setGridString(gridString);
+    useState(function () {
+      unityContext.on("NextPlayer", function (gridString) {
+        setGridString(gridString);
 
-    //     if (otherUserID.current != null)
-    //       {
-    //         console.log("send message");
-    //         sendMessage('-998 ' + gridString); // send grid to other player
-    //       } else
-    //         {
-    //           if (playerNbr === 1)
-    //             {
-    //               playerNbr = 2;
-    //               unityContext.send("Player2Spawner", "nextPlayer", gridString);
-    //             }
-    //               else
-    //                 {
-    //                   playerNbr = 1;
-    //                   unityContext.send("Player1Spawner", "nextPlayer", gridString);
-    //                 }
-    //           }
-    //     });
-    //   }, []);
+        if (otherUserID.current != null)
+          {
+            console.log("send message");
+            sendMessage('-998 ' + gridString); // send grid to other player
+          } else
+            {
+              if (playerNbr === 1)
+                {
+                  playerNbr = 2;
+                  unityContext.send("Player2Spawner", "nextPlayer", gridString);
+                }
+                  else
+                    {
+                      playerNbr = 1;
+                      unityContext.send("Player1Spawner", "nextPlayer", gridString);
+                    }
+              }
+        });
+      }, []);
 
-    // function Player1NextTurn()
-    //   {
-    //       unityContext.send("Player1Spawner", "nextPlayer", gridString);
-    //   }
-
-
-    // function Player2NextTurn()
-    //   {
-    //       if (gameStarted === 0)
-    //             StartGame()
-    //         else
-    //             unityContext.send("Player2Spawner", "nextPlayer", gridString);
-    //   }
+    function Player1NextTurn()
+      {
+          unityContext.send("Player1Spawner", "nextPlayer", gridString);
+      }
 
 
-    //   function StartGame()
-    //     {
-    //         if (playerNum.current !== 2)
-    //           {
-    //               unityContext.send("StartGame", "LoadGame","AAA");
-    //           } else {
-    //               unityContext.send("StartGame", "LoadGame",gridString);
-    //           }
+    function Player2NextTurn()
+      {
+          if (gameStarted === 0)
+                StartGame()
+            else
+                unityContext.send("Player2Spawner", "nextPlayer", gridString);
+      }
 
-    //           gameStarted = 1;
-    //     }
 
-    // function muteSound()
-    //   {
+      function StartGame()
+        {
+            if (playerNum.current !== 2)
+              {
+                  unityContext.send("StartGame", "LoadGame","AAA");
+              } else {
+                  unityContext.send("StartGame", "LoadGame",gridString);
+              }
 
-    //       unityContext.send("VolumeControl", "muteSound",);
-    //   }
+              gameStarted = 1;
+        }
 
-    // function decreaseVolume()
-    //   {
-    //       unityContext.send("VolumeControl", "decreaseVolume",);
-    //   }
+    function muteSound()
+      {
 
-    // function increaseVolume()
-    //   {
-    //       unityContext.send("VolumeControl", "increaseVolume",);
-    //   }
+          unityContext.send("VolumeControl", "muteSound",);
+      }
+
+    function decreaseVolume()
+      {
+          unityContext.send("VolumeControl", "decreaseVolume",);
+      }
+
+    function increaseVolume()
+      {
+          unityContext.send("VolumeControl", "increaseVolume",);
+      }
 
   //End Perry Add
 
@@ -118,22 +118,22 @@ const Room = (props) => {
     const socket = useRef(null);
     const playerNum = useRef(null);
 
-    // const chatKeydown = (e) => {
-    //     if(e.key === 'Enter') {
-    //         if(otherUserID.current === null || e.target.value === '') // do not send if other user not connected
-    //             return;
+    const chatKeydown = (e) => {
+        if(e.key === 'Enter') {
+            if(otherUserID.current === null || e.target.value === '') // do not send if other user not connected
+                return;
 
-    //         sendMessage("-997 " + e.target.value); // whatever was typed in gets sent on enter press
-    //         document.getElementById('chat-box').innerHTML += "You: " + e.target.value + '<br />'; // update chatbox on this side
-    //         e.target.value = ""; // reset input
-    //     }
-    //     // else if (e.key === "Backspace" || e.key === "Delete") { // remove
-    //     //     const newVal = e.target.value.slice(0, -1);
-    //     //     e.target.value = newVal;
-    //     // }
-    //     // else if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift")
-    //     //     e.target.value += e.key;
-    // }
+            sendMessage("-997 " + e.target.value); // whatever was typed in gets sent on enter press
+            document.getElementById('chat-box').innerHTML += "You: " + e.target.value + '<br />'; // update chatbox on this side
+            e.target.value = ""; // reset input
+        }
+        else if (e.key === "Backspace" || e.key === "Delete") { // remove
+            const newVal = e.target.value.slice(0, -1);
+            e.target.value = newVal;
+        }
+        else if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift")
+            e.target.value += e.key;
+    }
 
     const chatStyle = {
         'textAlign': 'left',
@@ -206,7 +206,7 @@ const Room = (props) => {
                 gameID.current = props.match.params.id; // save game id
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
                 .then(response => response.json())
-                //.then(data => console.log(data))
+                .then(data => console.log(data))
                 .catch(error => console.log(error))
                 .then(handshake()); // second player to join initiates handshake
             }
@@ -261,14 +261,14 @@ const Room = (props) => {
                 console.log("gridstring: " + msg.data.substr(5));
                 setGridString(msg.data.substr(5)); // set the grid string based on what is received
 
-                // if(playerNum.current === 1) // send to respective player
-                //   {
-                //     Player1NextTurn();
-                //   }
-                // else if(playerNum.current === 2)
-                //   {
-                //     Player2NextTurn();
-                //   }
+                if(playerNum.current === 1) // send to respective player
+                  {
+                    Player1NextTurn();
+                  }
+                else if(playerNum.current === 2)
+                  {
+                    Player2NextTurn();
+                  }
             }
 
             if(parseInt(msg.data) === -997) { // for receiving chat message
@@ -281,88 +281,59 @@ const Room = (props) => {
         };
     }, []); // run only once on load
 
-    // let startGameButton;
-    // if (playerNum !== 2 && gameStarted === 0){
-    //   startGameButton = (<button onClick={StartGame}>Start Game</button>)
-    // }
-
-    // return(
-    // <div>
-    //     <div>
-    //         {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
-
-    //         <div id="chat-system" style={{'position': 'absolute', 'left': '2em'}}>
-    //             <div id="chat-box" style={chatStyle}></div>               
-    //             <input id='chat-input' type="text" onKeyDown={e => chatKeydown(e)}></input>
-    //         </div>
-    //         {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
-    //         {props.id ? 
-    //         <div>
-    //             <p>Player 1</p>
-    //             <Unity unityContext={unityContext}
-    //                 style={{
-    //                     height: "720px",
-    //                     width: "600px",
-    //                     border: "2px solid black",
-    //                     background: "grey",
-    //                 }}
-    //             />
-    //         </div>
-    //         :
-    //         <div>
-    //             <p>Player 2</p>
-    //             <Unity unityContext={unityContext}
-    //                 style={{
-    //                     height: "720px",
-    //                     width: "600px",
-    //                     border: "2px solid black",
-    //                     background: "grey",
-    //                 }}
-    //             />
-    //         </div>
-    //         }
-    //     </div>
-
-    // {props.id ? startGameButton : null}
-    // <div><button onClick={muteSound}>Mute/Unmute</button>
-    // <button onClick={decreaseVolume}>Volume -</button>
-    // <button onClick={increaseVolume}>Volume +</button>
-
-    // </div>
-
-
-    // </div>
-
-    // )
+    let startGameButton;
+    if (playerNum !== 2 && gameStarted === 0){
+      startGameButton = (<button onClick={StartGame}>Start Game</button>)
+    }
 
     return(
     <div>
         <div>
-            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
-            <input type="text" onKeyPress={(e) => {
-                if(e.key === 'Enter') {
-                    sendMessage(e.target.value); // whatever was typed in gets sent on enter press
-                    e.target.value = "";
-                }
-            }}></input>
+            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
+            <div id="chat-system" style={{'position': 'absolute', 'left': '2em'}}>
+                <div id="chat-box" style={chatStyle}></div>               
+                <input id='chat-input' type="text" onKeyDown={e => chatKeydown(e)}></input>
+            </div>
             {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
             {props.id ? 
             <div>
                 <p>Player 1</p>
-                
+                <Unity unityContext={unityContext}
+                    style={{
+                        height: "720px",
+                        width: "600px",
+                        border: "2px solid black",
+                        background: "grey",
+                    }}
+                />
             </div>
             :
             <div>
                 <p>Player 2</p>
-                
+                <Unity unityContext={unityContext}
+                    style={{
+                        height: "720px",
+                        width: "600px",
+                        border: "2px solid black",
+                        background: "grey",
+                    }}
+                />
             </div>
             }
         </div>
-    </div>
-    )
 
-    
+    {props.id ? startGameButton : null}
+    <div><button onClick={muteSound}>Mute/Unmute</button>
+    <button onClick={decreaseVolume}>Volume -</button>
+    <button onClick={increaseVolume}>Volume +</button>
+
+    </div>
+
+
+    </div>
+
+    )    
 }
 
 export default Room;
