@@ -1,4 +1,4 @@
-import { useState, /*useMemo,*/ useEffect } from 'react';
+import { useState, useContext, /*useMemo,*/ useEffect } from 'react';
 import { Route, Switch, Redirect  } from 'react-router-dom';
 import AppBar from './NavBar';
 import Home from './screens/Home';
@@ -11,16 +11,17 @@ import './App.css';
 
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')));
   //console.log(currentUser.username)
-  // console.log(localStorage.getItem("user"))
+  //console.log(localStorage.getItem("user"))
+
 
   useEffect(() => {
     if(localStorage.getItem('user')) {
       setCurrentUser(JSON.parse(localStorage.getItem('user')));
     }
   }, []);
-  
+
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(currentUser));
   }, [currentUser]);
@@ -33,7 +34,7 @@ function App() {
 
     for (let i = 0; i < 10; i++) //create 10 character room ID
       res += chars[Math.floor(Math.random() * chars.length)];
-    
+
     return res;
   }
 
@@ -41,7 +42,7 @@ function App() {
   return (
     <div className="App">
       <UserContext.Provider value={value}>
-        <AppBar /* user={currentUser} */ /> {/* provide different options (login, signup, logout, based on current loggedi n user) */}
+        <AppBar user={currentUser}/>
 
         <Switch>
           <Route exact path="/">
@@ -51,15 +52,13 @@ function App() {
           <Route path="/home" render={() => {
             return <Home />
           }}/>
-          
+
           <Route path="/room" render={(props) => {
-            /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
-            return <Room {...props} id={genId()}/>
+            return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />;
           }}/>
 
-          <Route path="/join_room/:id" render={(props) => { /* CANT GET THIS TO TRIGGER BADBADBAD */
-            /* return currentUser ? <Room {...props} id={genId()}/> : <Redirect to="/login" />; */
-            return <Room {...props} id={null}/> // can pass within url and fetch id from within room
+          <Route path="/join_room/:id" render={(props) => {
+            return currentUser ? <Room {...props} id={null}/> : <Redirect to="/login" />;
           }}/>
 
           <Route path="/login" render={(props) => {
@@ -70,8 +69,8 @@ function App() {
             return <Signup {...props}/>
           }}/>
 
-          <Route path="/settings" render={(props) => {
-            return <Settings {...props}/>
+          <Route path="/settingsPage" render={(props) => {
+            return currentUser ? <Settings {...props} /> : <Redirect to="/login" />;
           }}/>
 
           <Route path='*' component={Home} /> {/*if page not found*/}

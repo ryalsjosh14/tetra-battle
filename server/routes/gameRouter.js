@@ -24,9 +24,8 @@ gameRouter.get('/create/:id&:user1', async (req, res) => { // create game
     });
     //console.log(game);
     game.save()
-    .then((data) => {
-        res.json(data);
-    });
+    
+    return res.json({success: true, message: "game created with id", game: game});
 });
 
 //working => example = http://localhost:8000/game/update/lkjaw&1929

@@ -29,7 +29,6 @@ const settingsRouter = require('./routes/settingsRouter');
 const gameRouter = require('./routes/gameRouter');
 
 
-const port = 8000;
 const app = express();
 
 /* WEB SOCKET SERVER */
