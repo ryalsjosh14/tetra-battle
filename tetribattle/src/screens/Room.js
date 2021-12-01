@@ -12,10 +12,10 @@ const unityContext = new UnityContext({
     //dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
     //frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
     //codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
-    loaderUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-    dataUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-    frameworkUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-    codeUrl: process.env.NODE_PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    loaderUrl: "../Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: "../Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: "../Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: "../Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
 
 
