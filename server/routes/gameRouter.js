@@ -12,6 +12,8 @@ gameRouter.get('/', async (req, res) => { //get all rooms
 gameRouter.get('/:id', async (req, res) => { //get based on game room id
     Game.findOne({id: req.params.id}, function (err, data) {
         if(err) throw err;
+        console.log(req.params.id)
+        console.log(data)
         res.json(data);
     });
 });
@@ -24,7 +26,8 @@ gameRouter.get('/create/:id&:user1', async (req, res) => { // create game
     });
     //console.log(game);
     game.save()
-    
+
+    console.log("created game")
     return res.json({success: true, message: "game created with id", game: game});
 });
 

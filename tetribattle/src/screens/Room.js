@@ -110,6 +110,8 @@ const Room = (props) => {
     const wsPort = window.location.protocol === 'https:' ? '' : ':3000';
     const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
+    const [gameIDReal, setGameID] = useState("")
+
     const userID = useRef(null); // get from user context
     const gameID = useRef(null);
     const otherUserID = useRef(null);
@@ -157,9 +159,10 @@ const Room = (props) => {
     }
 
     const handshake = async () => { // handshake with other web socket
+        console.log(gameID.current)
+        console.log(window.location.protocol + "//" + window.location.hostname + port + '/game/' + gameID.current)
         let data = await fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
-        console.log("handshake complete")
         console.log(data)
         
         otherUserID.current = data.user1; // store partners ID for websocket communications
@@ -185,6 +188,7 @@ const Room = (props) => {
 
         //console.log("id: " + props.id);
         const testDuplicate = async () => { // do not want to create duplicate gameID within mongo
+            console.log(window.location.protocol + "//" + window.location.hostname + port + '/game/' + props.id)
             let created = await fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/' + props.id, {method: 'GET'});
             created = await created.json();
             console.log(created);
@@ -222,11 +226,11 @@ const Room = (props) => {
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
                 .then(response => response.json())
                 .then(data => {
-                  //console.log(data)
+                  console.log(data)
                   console.log("successfully created game")
                 })
                 .catch(error => console.log(error));
-                gameID.current = props.id;
+                setGameID(props.id);
             }
         }
 
@@ -275,7 +279,7 @@ const Room = (props) => {
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
             //alert("received: " + msg.data + " from userID: " + otherUserID.current);
         };
-    }, [currentUser]); // run only once on load
+    }, []); // run only once on load
 
     // let startGameButton;
     // if (playerNum !== 2 && gameStarted === 0){
@@ -334,7 +338,7 @@ const Room = (props) => {
     return(
     <div>
         <div>
-            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
+            {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
             <input type="text" onKeyPress={(e) => {
                 if(e.key === 'Enter') {
                     sendMessage(e.target.value); // whatever was typed in gets sent on enter press
