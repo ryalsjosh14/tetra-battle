@@ -171,6 +171,8 @@ const Room = (props) => {
         console.log("wait for socket to open")
         console.log(socket.current.readyState)
         console.log("socket open")
+
+        sendMessage("-999 " + userID.current); // send ID to partner
     }
 
     const sendMessage = useCallback((msg) => { // send a message to the wsServer
