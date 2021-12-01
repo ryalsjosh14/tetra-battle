@@ -5,8 +5,12 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const http = require("http")
+const fs = require("fs")
+const ws = require('ws');
 
-const port = 8000;
+
+const port = process.env.PORT || 8000;
 let uri;
 try {
   uri = require("./config/config.js").uri;
@@ -31,9 +35,13 @@ const app = express();
 
 /* WEB SOCKET SERVER */
 
-const ws = require('ws');
 
-const tempServer = require('http').createServer(app)
+// const options = {
+//   key: fs.readFileSync("server.key"),
+//   cert: fs.readFileSync("server.cert")
+// }
+
+const tempServer = http.createServer(app)
 
 var wsServer = new ws.Server({ server: tempServer }); // initialize server
 var wsConnections = []; // store all active connections
