@@ -169,9 +169,9 @@ const Room = (props) => {
         console.log("about to send message in handshake with userID = " + userID.current)
         console.log("wait for socket to open")
         console.log(socket.current.readyState)
-        while(socket.current.readyState !== 1){
+        //while(socket.current.readyState !== 1){
           //sit here
-        }
+        //}
         console.log("socket open")
         sendMessage("-999 " + userID.current); // send ID to partner
     }
