@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 
 const port = 8000;
-
 let uri;
 try {
   uri = require("./config/config.js").uri;
@@ -71,14 +70,14 @@ app.use('/settings', settingsRouter);
 app.use('/game', gameRouter);
 
 //build
-// if (process.env.NODE_ENV === 'production') {
-//   // Serve any static files
-//   app.use(express.static(path.join(__dirname, '../tetribattle/build')));
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, '../tetribattle/build')));
 
-//   app.get('*', function(req, res) {
-//     res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
-//   });
-// }
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
+  });
+}
 
 //Listen
 const listenPort = process.env.PORT || port;
