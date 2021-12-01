@@ -6,8 +6,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require("cors");
 
-//const { uri }= require("./config/config") // declared further down as config/config.js
-//console.log(uri);
+const port = 8000;
 
 let uri;
 try {
@@ -41,14 +40,6 @@ var wsServer = new ws.Server({ server: tempServer }); // initialize server
 var wsConnections = []; // store all active connections
 //const wsConnections = new Map();
 
-//TODO****************************************************************
-// MAKE DB ENTRY FOR EACH GAME
-// (slow) ON MESSAGE, LOOK THEM UP FROM DB AND SEND TO THEM USING {wsConnections[id_from_db]}
-// IDEALLY, FIND SOME WAY TO CACHE THIS, OR EVEN BETTER JUST PASS THE OTHER USERS ID IN THE URL
-// HOWEVER, THAT REQUIRES REACT ROOM.js TO KNOW THE ID OF THE OTHER PLAYER, 
-// WHICH CAN ONLY BE DONE IF blah blah idc anymore just do the slow way for now and implement a handshake later kasdlkjasdlkjasdlkj
-//TODO****************************************************************
-
 wsServer.on('connection', (webSocket, req) => { // when a player connects
     console.log("player connected")
     const id = parseInt(req.url.substr(1)); // get their id (from url)
@@ -62,8 +53,8 @@ wsServer.on('connection', (webSocket, req) => { // when a player connects
   });
 });
 
-app.use(cors(corsOptions));
-app.use(morgan('dev')); //wrapping express
+app.use(cors(corsOptions)); //wrapping express
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 
 //Connect to mongo
