@@ -25,6 +25,8 @@ const Room = (props) => {
     const handshake = async () => { // handshake with other web socket
         let data = await fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/' + gameID.current, {method: 'GET'});
         data = await data.json();
+        console.log("handshake complete")
+        console.log(data)
         
         otherUserID.current = data.user1; // store partners ID for websocket communications
         sendMessage("-999 " + userID.current); // send ID to partner
@@ -51,13 +53,18 @@ const Room = (props) => {
         }
 
         userID.current = getIdAsInteger(currentUser.UID); // get from user context
+        console.log(userID.current)
 
         //CONNECT TO WEB SOCKET SERVER
-        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':5000/' + userID.current);
+        socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + ':8000/' + userID.current);
+
+        console.log("just connected to socket server")
 
         socket.current.onmessage = (msg) => { //when receiving a message
             if(parseInt(msg.data) === -999) { // for completing the hanshake
                 otherUserID.current = parseInt(msg.data.substr(5));
+                console.log("inside -999")
+                console.log(msg.data);
             }
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
             alert("received: " + msg.data + " from userID: " + otherUserID.current);
@@ -66,6 +73,7 @@ const Room = (props) => {
 
         console.log(socket.current);
         if(props.id === null) { // if second user on webpage
+          
             console.log('user ' + userID.current + ' joined room\n');
             console.log(props.match.params.id);
             gameID.current = props.match.params.id; // save game id
