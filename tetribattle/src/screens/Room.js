@@ -8,10 +8,10 @@ import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
 
 const unityContext = new UnityContext({
-    loaderUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-    dataUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-    frameworkUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-    codeUrl: "Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
 
 
@@ -118,7 +118,7 @@ const Room = (props) => {
 
     const chatKeydown = (e) => {
         if(e.key === 'Enter') {
-            if(otherUserID.current === null) // do not send if other user not connected
+            if(otherUserID.current === null || e.target.value === '') // do not send if other user not connected
                 return;
 
             sendMessage("-997 " + e.target.value); // whatever was typed in gets sent on enter press
