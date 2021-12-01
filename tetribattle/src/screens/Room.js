@@ -169,11 +169,10 @@ const Room = (props) => {
         console.log("about to send message in handshake with userID = " + userID.current)
         console.log("wait for socket to open")
         console.log(socket.current.readyState)
-        while(socket.current.readyState !== 1){
-          //sit here
-        }
+        setTimeout( () => {
+            sendMessage("-999 " + userID.current); // send ID to partner
+        }, 1000)
         console.log("socket open")
-        sendMessage("-999 " + userID.current); // send ID to partner
     }
 
     const sendMessage = useCallback((msg) => { // send a message to the wsServer
@@ -245,9 +244,10 @@ const Room = (props) => {
 
         socket.current.onopen = () => {
           console.log("opening socket")
+          init(); // create game db entry and assign playerNum
         }
 
-        init(); // create game db entry and assign playerNum
+        //init(); // create game db entry and assign playerNum
 
         socket.current.onmessage = (msg) => { //when receiving a message
 
