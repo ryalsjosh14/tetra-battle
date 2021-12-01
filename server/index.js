@@ -7,13 +7,16 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const http = require("http")
 const fs = require("fs")
-const ws = require('ws');
+const ws = require('ws');  
+
 
 
 const port = 8000;
 let uri;
 try {
   uri = require("./config/config.js").uri;
+  console.log("uri: " + uri)
+
 } catch {
   uri = process.env.uri;
   console.log("uri: " + uri)
