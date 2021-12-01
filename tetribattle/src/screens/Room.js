@@ -116,6 +116,36 @@ const Room = (props) => {
     const socket = useRef(null);
     const playerNum = useRef(null);
 
+    const chatKeydown = (e) => {
+        if(e.key === 'Enter') {
+            if(otherUserID.current === null) // do not send if other user not connected
+                return;
+
+            sendMessage("-997 " + e.target.value); // whatever was typed in gets sent on enter press
+            document.getElementById('chat-box').innerHTML += "You: " + e.target.value + '<br />'; // update chatbox on this side
+            e.target.value = ""; // reset input
+        }
+        // else if (e.key === "Backspace" || e.key === "Delete") { // remove
+        //     const newVal = e.target.value.slice(0, -1);
+        //     e.target.value = newVal;
+        // }
+        // else if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift")
+        //     e.target.value += e.key;
+    }
+
+    const chatStyle = {
+        'textAlign': 'left',
+        'margin': '0 auto',
+        'marginBottom': '25px',
+        'padding': '10px',
+        'background': '#fff',
+        'height': '500px',
+        'width': '200px',
+        'border': '1px solid #a7a7a7',
+        'overflow': 'auto',
+        'borderRadius': '4px',
+        'borderBottom': '4px solid #a7a7a7'
+    }
 
     const getIdAsInteger = (id) => { // for storing UI  D in database
         let sum = 0;
@@ -200,6 +230,7 @@ const Room = (props) => {
         init(); // create game db entry and assign playerNum
 
         socket.current.onmessage = (msg) => { //when receiving a message
+
             if(parseInt(msg.data) === -999) { // for completing the hanshake
                 otherUserID.current = parseInt(msg.data.substr(5));
             }
@@ -216,6 +247,11 @@ const Room = (props) => {
                   {
                     Player2NextTurn();
                   }
+            }
+
+            if(parseInt(msg.data) === -997) { // for receiving chat message
+                let chat = msg.data.substr(5);
+                document.getElementById('chat-box').innerHTML += "Partner: " + chat + '<br />'; // update chatbox on this side
             }
 
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
@@ -237,13 +273,10 @@ const Room = (props) => {
         <div>
             {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
 
-            {/*<input type="text" onKeyPress={(e) => {
-                if(e.key === 'Enter') {
-                    sendMessage(e.target.value); // whatever was typed in gets sent on enter press
-                    e.target.value = "";
-                }
-            }}></input>*/}
-
+            <div id="chat-system" style={{'position': 'absolute', 'left': '2em'}}>
+                <div id="chat-box" style={chatStyle}></div>               
+                <input id='chat-input' type="text" onKeyDown={e => chatKeydown(e)}></input>
+            </div>
             {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
             {props.id ? 
             <div>
