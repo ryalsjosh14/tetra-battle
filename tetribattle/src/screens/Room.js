@@ -164,7 +164,7 @@ const Room = (props) => {
     
                 playerNum.current = 2;
                 gameID.current = props.match.params.id; // save game id
-                fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
+                fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
                 .then(response => response.json())
                 //.then(data => console.log(data))
                 .catch(error => console.log(error))
@@ -182,7 +182,7 @@ const Room = (props) => {
                 //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
                 playerNum.current = 1;
     
-                fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
+                fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
                 .then(response => response.json())
                 .then(data => {
                   //console.log(data)
@@ -235,7 +235,7 @@ const Room = (props) => {
             console.log('user ' + userID.current + ' joined room\n');
             console.log(props.match.params.id);
             gameID.current = props.match.params.id; // save game id
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
+            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
             .then(response => response.json())
             .then(data => console.log())
             .catch(error => console.log(error))
@@ -246,7 +246,7 @@ const Room = (props) => {
                 return;
             //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
 
-            fetch(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
+            fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.log(error));
