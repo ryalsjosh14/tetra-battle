@@ -324,8 +324,13 @@ const Room = (props) => {
     <div>
         <div>
             {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + props.id}</p> : <p></p>}
+            <input type="text" onKeyPress={(e) => {
+                if(e.key === 'Enter') {
+                    sendMessage(e.target.value); // whatever was typed in gets sent on enter press
+                    e.target.value = "";
+                }
+            }}></input>
 
-          
             {/* {props.id ? <p>Player 1</p>:<p>Player 2</p>} */}
             {props.id ? 
             <div>
