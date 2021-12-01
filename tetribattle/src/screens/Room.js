@@ -216,7 +216,7 @@ const Room = (props) => {
                 .then(response => response.json())
                 .then(data => {
                   //console.log(data)
-                  //console.log("successfully made request")
+                  console.log("successfully created game")
                 })
                 .catch(error => console.log(error));
                 gameID.current = props.id;
@@ -229,7 +229,8 @@ const Room = (props) => {
         //CONNECT TO WEB SOCKET SERVER
         socket.current = new WebSocket(wsProtocol + '://' + window.location.hostname + port + '/' + userID.current);
 
-        //console.log("just connected to socket server")
+        console.log("just connected to socket server")
+        console.log(socket.current)
 
         init(); // create game db entry and assign playerNum
 

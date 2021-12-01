@@ -10,7 +10,7 @@ const fs = require("fs")
 const ws = require('ws');
 
 
-const port = process.env.PORT || 8000;
+const port = 8000;
 let uri;
 try {
   uri = require("./config/config.js").uri;
@@ -41,24 +41,9 @@ const app = express();
 //   cert: fs.readFileSync("server.cert")
 // }
 
-const tempServer = http.createServer(app)
+//const tempServer = http.createServer(app)
 
-var wsServer = new ws.Server({ server: tempServer }); // initialize server
-var wsConnections = []; // store all active connections
-//const wsConnections = new Map();
 
-wsServer.on('connection', (webSocket, req) => { // when a player connects
-    console.log("player connected")
-    const id = parseInt(req.url.substr(1)); // get their id (from url)
-    wsConnections[id] = webSocket; // store as an active connection
-
-    console.log("user " + id + " connected\n");
-
-    webSocket.on('message', (msg) => { // when a message is received
-      console.log("received: " + msg);
-      wsConnections[parseInt(msg)].send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
-  });
-});
 
 app.use(cors(corsOptions)); //wrapping express
 app.use(morgan('dev'));
@@ -86,11 +71,31 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
   });
 }
+const tempServer = http.createServer(app);
+
 
 //Listen
 const listenPort = process.env.PORT || port;
 console.log(process.env.PORT + ", " + port);
 tempServer.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
+
+
+var wsServer = new ws.Server({ server: tempServer }); // initialize server
+var wsConnections = []; // store all active connections
+//const wsConnections = new Map();
+
+wsServer.on('connection', (webSocket, req) => { // when a player connects
+    console.log("player connected")
+    const id = parseInt(req.url.substr(1)); // get their id (from url)
+    wsConnections[id] = webSocket; // store as an active connection
+
+    console.log("user " + id + " connected\n");
+
+    webSocket.on('message', (msg) => { // when a message is received
+      console.log("received: " + msg);
+      wsConnections[parseInt(msg)].send(msg.substr(msg.indexOf(' ')+1)); // send to connection specified with leading int and only send after the first space
+  });
+});
 
 
 
