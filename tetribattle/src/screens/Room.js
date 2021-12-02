@@ -353,7 +353,7 @@ const Room = (props) => {
 
     </div>
 
-    )    
+    )
 }
 
 export default Room;
