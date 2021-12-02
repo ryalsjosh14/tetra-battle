@@ -8,14 +8,13 @@ import Unity, { UnityContext} from "react-unity-webgl";
 //End Perry Add
 
 const unityContext = new UnityContext({
-    //loaderUrl: "/anti-matter-tetris-webgl/build/anti-matter-tetris.loader.js",
-    //dataUrl: "build/anti-matter-tetris-webgl/build/anti-matter-tetris.data",
-    //frameworkUrl: "build/anti-matter-tetris-webgl/build/anti-matter-tetris.framework.js",
-    //codeUrl: "build/anti-matter-tetris-webgl/build/anti-matter-tetris.wasm",
     loaderUrl: "/tetribattle/public/Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.loader.js",
     dataUrl: "/tetribattle/public/Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.data",
-    frameworkUrl: "/tetribattle/public/Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.framework.js",
+    frameworkUrl: "/tetribattle/public/Anti-Matter-Tetris-WEBGL/Anti-Matter-Tetris.framework.js",
     codeUrl: "/tetribattle/public/Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.wasm",
+
+
+
 });
 
 
