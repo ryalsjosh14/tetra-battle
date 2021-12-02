@@ -8,10 +8,10 @@ import Unity, { UnityContext} from "react-unity-webgl";
 //End Perry Add
 
 const unityContext = new UnityContext({
-    loaderUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
-    dataUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
-    frameworkUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
-    codeUrl: process.env.PUBLIC_URL + "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
+    loaderUrl: "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    dataUrl: "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    frameworkUrl: "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    codeUrl: "/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
     // loaderUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
     // dataUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
     // frameworkUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
@@ -304,6 +304,10 @@ const Room = (props) => {
 
     return(
     <div>
+        <button onClick={() => {
+            console.log("process.cwd(): " + process.cwd());
+            console.log("process.__dirname: " + process.__dirname);
+        }}>Start Game</button>
         <div>
             {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
 

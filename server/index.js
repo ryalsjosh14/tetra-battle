@@ -77,15 +77,14 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-
-const tempServer = http.createServer(app);
-
-
 //Listen
 const listenPort = process.env.PORT || port;
-console.log(process.env.PORT + ", " + port);
-console.log(process.env.PUBLIC_URL);
-console.log(__dirname);
+
+console.log("p.env.PUBLIC_URL: " + process.env.PUBLIC_URL);
+console.log("PUBLIC_URL: " + PUBLIC_URL);
+console.log("__dirname: " + __dirname);
+
+const tempServer = http.createServer(app);
 tempServer.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
 
 
