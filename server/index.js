@@ -72,6 +72,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../tetribattle/build')));
   //app.use(express.static(path.join(__dirname, '../tetribattle/public')));
 
+  // app.get('/loader', function(req, res) {
+  //   res.sendFile(path.join(__dirname, '../tetribattle/build/anti-matter-tetris.loader.js'));
+  // });
+
   app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '../tetribattle/build/index.html'));
   });
