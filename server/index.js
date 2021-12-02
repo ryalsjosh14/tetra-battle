@@ -84,6 +84,8 @@ const tempServer = http.createServer(app);
 //Listen
 const listenPort = process.env.PORT || port;
 console.log(process.env.PORT + ", " + port);
+console.log(process.env.PUBLIC_URL);
+console.log(__dirname);
 tempServer.listen(listenPort, () => console.log('Listening on: http://localhost:' + listenPort + '/'));
 
 
