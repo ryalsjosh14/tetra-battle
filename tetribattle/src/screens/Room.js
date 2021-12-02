@@ -3,16 +3,16 @@ import { useContext, useState, useEffect, useCallback, useRef } from "react";
 
 //Perry Add
 import React from "react";
-import Unity, { UnityContext} from "react-unity-webgl";
+  import Unity, { UnityContext} from "react-unity-webgl";
 //import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
       var leadURL = "../";
 
       const unityContext = new UnityContext({
           loaderUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.loader.js",
-          dataUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.data",
-          frameworkUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.framework.js",
-          codeUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.wasm",
+          dataUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.data.unityweb",
+          frameworkUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.framework.js.unityweb",
+          codeUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.wasm.unityweb",
 
         });
 
