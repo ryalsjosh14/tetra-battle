@@ -8,13 +8,14 @@ import Unity, { UnityContext} from "react-unity-webgl";
 //End Perry Add
 
 const unityContext = new UnityContext({
-    loaderUrl: "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.loader.js",
-    dataUrl: "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.data",
-    frameworkUrl: "Anti-Matter-Tetris-WEBGL/Anti-Matter-Tetris.framework.js",
-    codeUrl: "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.wasm",
-
-
-
+    loaderUrl: "../anti-matter-tetris-webgl/build/anti-matter-tetris.loader.js",
+    dataUrl: "../anti-matter-tetris-webgl/build/anti-matter-tetris.data",
+    frameworkUrl: "../anti-matter-tetris-webgl/build/anti-matter-tetris.framework.js",
+    codeUrl: "../anti-matter-tetris-webgl/build/anti-matter-tetris.wasm",
+    // loaderUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.loader.js",
+    // dataUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.data",
+    // frameworkUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.framework.js",
+    // codeUrl: "../../public/Anti-Matter Tetris WEBGL/build/Anti-Matter Tetris.wasm",
 });
 
 
@@ -178,6 +179,7 @@ const Room = (props) => {
         console.log("socket open")
 
         sendMessage("-999 " + userID.current); // send ID to partner
+        sendMessage("-997 joined the room!"); // log join in chat
     }
 
     const sendMessage = useCallback((msg) => { // send a message to the wsServer
@@ -288,7 +290,7 @@ const Room = (props) => {
 
             if(parseInt(msg.data) === -997) { // for receiving chat message
                 let chat = msg.data.substr(5);
-                document.getElementById('chat-box').innerHTML += "Partner: " + chat + '<br />'; // update chatbox on this side
+                document.getElementById('chat-box').innerHTML += "Opponent: " + chat + '<br />'; // update chatbox on this side
             }
 
             console.log("received: " + msg.data + " from userID: " + otherUserID.current); // basic logging in js console
@@ -303,10 +305,6 @@ const Room = (props) => {
 
     return(
     <div>
-        <button onClick={() => {
-            console.log("process.cwd(): " + process.cwd());
-            console.log("process.__dirname: " + process.__dirname);
-        }}>Start Game</button>
         <div>
             {props.id ? <p>Link to join: {window.location.protocol + "//" + window.location.host + "/join_room/" + gameIDReal}</p> : <p></p>}
 
