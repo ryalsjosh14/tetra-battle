@@ -1,5 +1,5 @@
 import { Grid, Button } from '@material-ui/core'
-import demo from '../assets/demo2.gif';
+import demo from '../assets/demo3.gif';
 //import Typography from '@material-ui/core/Typography';
 
 export default function Home(){
