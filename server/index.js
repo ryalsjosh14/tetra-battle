@@ -81,7 +81,7 @@ if (process.env.NODE_ENV === 'production') {
 const listenPort = process.env.PORT || port;
 
 console.log("p.env.PUBLIC_URL: " + process.env.PUBLIC_URL);
-console.log("PUBLIC_URL: " + PUBLIC_URL);
+//console.log("PUBLIC_URL: " + PUBLIC_URL);
 console.log("__dirname: " + __dirname);
 
 const tempServer = http.createServer(app);
