@@ -3,18 +3,18 @@ import { useContext, useState, useEffect, useCallback, useRef } from "react";
 
 //Perry Add
 import React from "react";
-import Unity, { UnityContext} from "react-unity-webgl";
+  import Unity, { UnityContext} from "react-unity-webgl";
 //import SelectInput from "@material-ui/core/Select/SelectInput";
 //End Perry Add
+      var leadURL = "../";
 
-const unityContext = new UnityContext({
-    loaderUrl: "anti-matter-tetris-webgl/build/anti-matter-tetris.loader.js",
-    dataUrl: "anti-matter-tetris-webgl/build/anti-matter-tetris.data",
-    frameworkUrl: "anti-matter-tetris-webgl/build/anti-matter-tetris.framework.js",
-    codeUrl: "anti-matter-tetris-webgl/build/anti-matter-tetris.wasm",
-  
-});
+      const unityContext = new UnityContext({
+          loaderUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.loader.js",
+          dataUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.data.unityweb",
+          frameworkUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.framework.js.unityweb",
+          codeUrl: leadURL  + "Anti-Matter-Tetris-WEBGL/Build/Anti-Matter-Tetris.wasm.unityweb",
 
+        });
 
 //TODO*** CONVERT WS SERVER TO USING HASHMAP INSTEAD OF ARRAY DUE TO LARGE NUMBER INDICES
 
@@ -35,6 +35,7 @@ const Room = (props) => {
         setIsGameOver(true);
         });
       }, []);
+
 
     useState(function () {
       unityContext.on("NextPlayer", function (gridString) {
@@ -207,6 +208,7 @@ const Room = (props) => {
                 console.log("in second user if")
 
                 playerNum.current = 2;
+                leadURL = "../";
                 gameID.current = props.match.params.id; // save game id
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/update/' + gameID.current + "&" + userID.current, {method: 'PATCH'})
                 .then(response => response.json())
@@ -225,7 +227,7 @@ const Room = (props) => {
                 }
                 //console.log(window.location.protocol + "//" + window.location.hostname + ':8000/game/create/' + props.id + "&" + userID.current);
                 playerNum.current = 1;
-
+                leadURL = " ";
                 fetch(window.location.protocol + "//" + window.location.hostname + port + '/game/create/' + props.id + "&" + userID.current, {method: 'GET'})
                 .then(response => response.json())
                 .then(data => {
