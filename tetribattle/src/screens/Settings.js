@@ -18,15 +18,16 @@ const Settings = (props) => {
                 <Grid item xs={12} sm={8}>
                     <h1>Settings</h1>
                     <p>customize settings</p>
+                    <p>Under Development</p>
                 </Grid>
                 <Grid item xs={false} sm={2}/>
 
-                <Box sx={{width:200}}>
+                {/* <Box sx={{width:200}}>
                     <Typography id="das-slider" gutterBottom>
                         DAS
                     </Typography>
                     <Slider width={200} defaultValue={5} valueLabelDisplay="on"  min={1} max={10} step={.1}  />
-                </Box>
+                </Box> */}
 
             </Grid>
         </form>

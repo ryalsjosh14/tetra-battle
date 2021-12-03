@@ -57,10 +57,10 @@ const NavBar = (props) => {
               : <Button title="Please login to play" href="/room" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Play</Button>
             }
 
-            { currentUser
+            {/* { currentUser
               ? <Button color="inherit" href="/settingsPage" style={{display: 'flex', justifyContent:'flex-end'}}>Settings</Button>
               : <Button title="Please login to change settings" href="/settingsPage" style={{display: 'flex', color: 'grey', justifyContent:'flex-end'}}>Settings</Button>
-            }
+            } */}
 
             {loginButton}
 
