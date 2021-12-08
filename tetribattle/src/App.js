@@ -58,6 +58,8 @@ function App() {
           }}/>
 
           <Route path="/join_room/:id" render={(props) => {
+
+
             return currentUser ? <Room {...props} id={null}/> : <Redirect to="/login" />;
           }}/>
 
